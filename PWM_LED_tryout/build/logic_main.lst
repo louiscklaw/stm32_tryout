@@ -1,0 +1,641 @@
+ARM GAS  /tmp/cctNIZIV.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"logic_main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.init_timer_TIM6,"ax",%progbits
+  18              		.align	1
+  19              		.global	init_timer_TIM6
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	init_timer_TIM6:
+  26              	.LFB127:
+  27              		.file 1 "Src/logic_main.c"
+   1:Src/logic_main.c **** 
+   2:Src/logic_main.c **** 
+   3:Src/logic_main.c **** #include "main.h"
+   4:Src/logic_main.c **** #include "stm32f3xx_hal.h"
+   5:Src/logic_main.c **** #include "usart.h"
+   6:Src/logic_main.c **** #include "gpio.h"
+   7:Src/logic_main.c **** #include "stm32f3xx_hal_tim.h"
+   8:Src/logic_main.c **** #include "stm32_hal_legacy.h"
+   9:Src/logic_main.c **** 
+  10:Src/logic_main.c **** void init_test_LD5(void);
+  11:Src/logic_main.c **** void init_test_B1(void);
+  12:Src/logic_main.c **** 
+  13:Src/logic_main.c **** GPIO_InitTypeDef GPIO_InitStruct;
+  14:Src/logic_main.c **** 
+  15:Src/logic_main.c **** TIM_HandleTypeDef htim6;
+  16:Src/logic_main.c **** 
+  17:Src/logic_main.c **** void logic_main(void){
+  18:Src/logic_main.c ****     init_timer_TIM6();
+  19:Src/logic_main.c ****     init_and_start_htim(&htim6);
+  20:Src/logic_main.c **** 
+  21:Src/logic_main.c **** 
+  22:Src/logic_main.c **** 
+  23:Src/logic_main.c **** 
+  24:Src/logic_main.c ****     while (1);
+  25:Src/logic_main.c **** }
+  26:Src/logic_main.c **** 
+  27:Src/logic_main.c **** void init_timer_TIM6(){
+  28              		.loc 1 27 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cctNIZIV.s 			page 2
+
+
+  32 0000 00B5     		push	{lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 14, -4
+  36 0002 83B0     		sub	sp, sp, #12
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 16
+  28:Src/logic_main.c ****     htim6.Instance = TIM6;
+  39              		.loc 1 28 0
+  40 0004 0E4B     		ldr	r3, .L3
+  41 0006 0F4A     		ldr	r2, .L3+4
+  42 0008 1A60     		str	r2, [r3]
+  29:Src/logic_main.c ****     htim6.Init.Prescaler = 36000-1; //72MHz/36000 = 2000Hz
+  43              		.loc 1 29 0
+  44 000a 48F69F42 		movw	r2, #35999
+  45 000e 5A60     		str	r2, [r3, #4]
+  30:Src/logic_main.c ****     htim6.Init.Period = 999;      //2000HZ / 1000 = 2Hz = 0.5s
+  46              		.loc 1 30 0
+  47 0010 40F2E732 		movw	r2, #999
+  48 0014 DA60     		str	r2, [r3, #12]
+  49              	.LBB2:
+  31:Src/logic_main.c **** 
+  32:Src/logic_main.c ****     __HAL_RCC_TIM6_CLK_ENABLE();
+  50              		.loc 1 32 0
+  51 0016 0C4B     		ldr	r3, .L3+8
+  52 0018 DA69     		ldr	r2, [r3, #28]
+  53 001a 42F01002 		orr	r2, r2, #16
+  54 001e DA61     		str	r2, [r3, #28]
+  55 0020 DB69     		ldr	r3, [r3, #28]
+  56 0022 03F01003 		and	r3, r3, #16
+  57 0026 0193     		str	r3, [sp, #4]
+  58 0028 019B     		ldr	r3, [sp, #4]
+  59              	.LBE2:
+  33:Src/logic_main.c **** 
+  34:Src/logic_main.c ****     HAL_NVIC_SetPriority(TIM6_DAC1_IRQn, 0, 0);
+  60              		.loc 1 34 0
+  61 002a 0022     		movs	r2, #0
+  62 002c 1146     		mov	r1, r2
+  63 002e 3620     		movs	r0, #54
+  64 0030 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+  65              	.LVL0:
+  35:Src/logic_main.c ****     HAL_NVIC_EnableIRQ(TIM6_DAC1_IRQn);
+  66              		.loc 1 35 0
+  67 0034 3620     		movs	r0, #54
+  68 0036 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+  69              	.LVL1:
+  36:Src/logic_main.c **** }
+  70              		.loc 1 36 0
+  71 003a 03B0     		add	sp, sp, #12
+  72              	.LCFI2:
+  73              		.cfi_def_cfa_offset 4
+  74              		@ sp needed
+  75 003c 5DF804FB 		ldr	pc, [sp], #4
+  76              	.L4:
+  77              		.align	2
+  78              	.L3:
+  79 0040 00000000 		.word	htim6
+ARM GAS  /tmp/cctNIZIV.s 			page 3
+
+
+  80 0044 00100040 		.word	1073745920
+  81 0048 00100240 		.word	1073876992
+  82              		.cfi_endproc
+  83              	.LFE127:
+  85              		.section	.text.init_timer_TIM7,"ax",%progbits
+  86              		.align	1
+  87              		.global	init_timer_TIM7
+  88              		.syntax unified
+  89              		.thumb
+  90              		.thumb_func
+  91              		.fpu fpv4-sp-d16
+  93              	init_timer_TIM7:
+  94              	.LFB128:
+  37:Src/logic_main.c **** 
+  38:Src/logic_main.c **** 
+  39:Src/logic_main.c **** void init_timer_TIM7(){
+  95              		.loc 1 39 0
+  96              		.cfi_startproc
+  97              		@ args = 0, pretend = 0, frame = 8
+  98              		@ frame_needed = 0, uses_anonymous_args = 0
+  99 0000 00B5     		push	{lr}
+ 100              	.LCFI3:
+ 101              		.cfi_def_cfa_offset 4
+ 102              		.cfi_offset 14, -4
+ 103 0002 83B0     		sub	sp, sp, #12
+ 104              	.LCFI4:
+ 105              		.cfi_def_cfa_offset 16
+  40:Src/logic_main.c ****     htim6.Instance = TIM7;
+ 106              		.loc 1 40 0
+ 107 0004 0E4B     		ldr	r3, .L7
+ 108 0006 0F4A     		ldr	r2, .L7+4
+ 109 0008 1A60     		str	r2, [r3]
+  41:Src/logic_main.c ****     htim6.Init.Prescaler = 36000-1; //72MHz/36000 = 2000Hz
+ 110              		.loc 1 41 0
+ 111 000a 48F69F42 		movw	r2, #35999
+ 112 000e 5A60     		str	r2, [r3, #4]
+  42:Src/logic_main.c ****     htim6.Init.Period = 999;      //2000HZ / 1000 = 2Hz = 0.5s
+ 113              		.loc 1 42 0
+ 114 0010 40F2E732 		movw	r2, #999
+ 115 0014 DA60     		str	r2, [r3, #12]
+ 116              	.LBB3:
+  43:Src/logic_main.c **** 
+  44:Src/logic_main.c ****     __HAL_RCC_TIM7_CLK_ENABLE();
+ 117              		.loc 1 44 0
+ 118 0016 0C4B     		ldr	r3, .L7+8
+ 119 0018 DA69     		ldr	r2, [r3, #28]
+ 120 001a 42F02002 		orr	r2, r2, #32
+ 121 001e DA61     		str	r2, [r3, #28]
+ 122 0020 DB69     		ldr	r3, [r3, #28]
+ 123 0022 03F02003 		and	r3, r3, #32
+ 124 0026 0193     		str	r3, [sp, #4]
+ 125 0028 019B     		ldr	r3, [sp, #4]
+ 126              	.LBE3:
+  45:Src/logic_main.c **** 
+  46:Src/logic_main.c ****     HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
+ 127              		.loc 1 46 0
+ 128 002a 0022     		movs	r2, #0
+ARM GAS  /tmp/cctNIZIV.s 			page 4
+
+
+ 129 002c 1146     		mov	r1, r2
+ 130 002e 3720     		movs	r0, #55
+ 131 0030 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 132              	.LVL2:
+  47:Src/logic_main.c ****     HAL_NVIC_EnableIRQ(TIM7_IRQn);
+ 133              		.loc 1 47 0
+ 134 0034 3720     		movs	r0, #55
+ 135 0036 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 136              	.LVL3:
+  48:Src/logic_main.c **** }
+ 137              		.loc 1 48 0
+ 138 003a 03B0     		add	sp, sp, #12
+ 139              	.LCFI5:
+ 140              		.cfi_def_cfa_offset 4
+ 141              		@ sp needed
+ 142 003c 5DF804FB 		ldr	pc, [sp], #4
+ 143              	.L8:
+ 144              		.align	2
+ 145              	.L7:
+ 146 0040 00000000 		.word	htim6
+ 147 0044 00140040 		.word	1073746944
+ 148 0048 00100240 		.word	1073876992
+ 149              		.cfi_endproc
+ 150              	.LFE128:
+ 152              		.section	.text.TIM6_DAC_IRQHandler,"ax",%progbits
+ 153              		.align	1
+ 154              		.global	TIM6_DAC_IRQHandler
+ 155              		.syntax unified
+ 156              		.thumb
+ 157              		.thumb_func
+ 158              		.fpu fpv4-sp-d16
+ 160              	TIM6_DAC_IRQHandler:
+ 161              	.LFB129:
+  49:Src/logic_main.c **** 
+  50:Src/logic_main.c **** 
+  51:Src/logic_main.c **** void TIM6_DAC1_IRQHandler(void) {
+ 162              		.loc 1 51 0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 0
+ 165              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166 0000 08B5     		push	{r3, lr}
+ 167              	.LCFI6:
+ 168              		.cfi_def_cfa_offset 8
+ 169              		.cfi_offset 3, -8
+ 170              		.cfi_offset 14, -4
+  52:Src/logic_main.c ****     // __HAL_TIM_CLEAR_IT(&htim6, TIM_IT_UPDATE);
+  53:Src/logic_main.c ****     HAL_TIM_IRQHandler(&htim6);
+ 171              		.loc 1 53 0
+ 172 0002 0248     		ldr	r0, .L11
+ 173 0004 FFF7FEFF 		bl	HAL_TIM_IRQHandler
+ 174              	.LVL4:
+  54:Src/logic_main.c **** }
+ 175              		.loc 1 54 0
+ 176 0008 08BD     		pop	{r3, pc}
+ 177              	.L12:
+ 178 000a 00BF     		.align	2
+ 179              	.L11:
+ARM GAS  /tmp/cctNIZIV.s 			page 5
+
+
+ 180 000c 00000000 		.word	htim6
+ 181              		.cfi_endproc
+ 182              	.LFE129:
+ 184              		.section	.text.init_and_start_htim,"ax",%progbits
+ 185              		.align	1
+ 186              		.global	init_and_start_htim
+ 187              		.syntax unified
+ 188              		.thumb
+ 189              		.thumb_func
+ 190              		.fpu fpv4-sp-d16
+ 192              	init_and_start_htim:
+ 193              	.LFB130:
+  55:Src/logic_main.c **** 
+  56:Src/logic_main.c **** void init_and_start_htim(TIM_HandleTypeDef *htim_to_start){
+ 194              		.loc 1 56 0
+ 195              		.cfi_startproc
+ 196              		@ args = 0, pretend = 0, frame = 0
+ 197              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198              	.LVL5:
+ 199 0000 10B5     		push	{r4, lr}
+ 200              	.LCFI7:
+ 201              		.cfi_def_cfa_offset 8
+ 202              		.cfi_offset 4, -8
+ 203              		.cfi_offset 14, -4
+ 204 0002 0446     		mov	r4, r0
+  57:Src/logic_main.c ****     HAL_TIM_Base_Init(htim_to_start);
+ 205              		.loc 1 57 0
+ 206 0004 FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 207              	.LVL6:
+  58:Src/logic_main.c ****     HAL_TIM_Base_Start_IT(htim_to_start);
+ 208              		.loc 1 58 0
+ 209 0008 2046     		mov	r0, r4
+ 210 000a FFF7FEFF 		bl	HAL_TIM_Base_Start_IT
+ 211              	.LVL7:
+  59:Src/logic_main.c **** }
+ 212              		.loc 1 59 0
+ 213 000e 10BD     		pop	{r4, pc}
+ 214              		.cfi_endproc
+ 215              	.LFE130:
+ 217              		.section	.text.logic_main,"ax",%progbits
+ 218              		.align	1
+ 219              		.global	logic_main
+ 220              		.syntax unified
+ 221              		.thumb
+ 222              		.thumb_func
+ 223              		.fpu fpv4-sp-d16
+ 225              	logic_main:
+ 226              	.LFB126:
+  17:Src/logic_main.c ****     init_timer_TIM6();
+ 227              		.loc 1 17 0
+ 228              		.cfi_startproc
+ 229              		@ Volatile: function does not return.
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232 0000 08B5     		push	{r3, lr}
+ 233              	.LCFI8:
+ 234              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cctNIZIV.s 			page 6
+
+
+ 235              		.cfi_offset 3, -8
+ 236              		.cfi_offset 14, -4
+  18:Src/logic_main.c ****     init_and_start_htim(&htim6);
+ 237              		.loc 1 18 0
+ 238 0002 FFF7FEFF 		bl	init_timer_TIM6
+ 239              	.LVL8:
+  19:Src/logic_main.c **** 
+ 240              		.loc 1 19 0
+ 241 0006 0248     		ldr	r0, .L18
+ 242 0008 FFF7FEFF 		bl	init_and_start_htim
+ 243              	.LVL9:
+ 244              	.L16:
+ 245 000c FEE7     		b	.L16
+ 246              	.L19:
+ 247 000e 00BF     		.align	2
+ 248              	.L18:
+ 249 0010 00000000 		.word	htim6
+ 250              		.cfi_endproc
+ 251              	.LFE126:
+ 253              		.section	.text.deinit_and_stop,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	deinit_and_stop
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 259              		.fpu fpv4-sp-d16
+ 261              	deinit_and_stop:
+ 262              	.LFB131:
+  60:Src/logic_main.c **** 
+  61:Src/logic_main.c **** void deinit_and_stop(TIM_HandleTypeDef *htim_to_stop){
+ 263              		.loc 1 61 0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267              	.LVL10:
+ 268 0000 10B5     		push	{r4, lr}
+ 269              	.LCFI9:
+ 270              		.cfi_def_cfa_offset 8
+ 271              		.cfi_offset 4, -8
+ 272              		.cfi_offset 14, -4
+ 273 0002 0446     		mov	r4, r0
+  62:Src/logic_main.c ****     HAL_TIM_Base_Stop_IT(htim_to_stop);
+ 274              		.loc 1 62 0
+ 275 0004 FFF7FEFF 		bl	HAL_TIM_Base_Stop_IT
+ 276              	.LVL11:
+  63:Src/logic_main.c ****     HAL_TIM_Base_DeInit(htim_to_stop);
+ 277              		.loc 1 63 0
+ 278 0008 2046     		mov	r0, r4
+ 279 000a FFF7FEFF 		bl	HAL_TIM_Base_DeInit
+ 280              	.LVL12:
+  64:Src/logic_main.c **** }
+ 281              		.loc 1 64 0
+ 282 000e 10BD     		pop	{r4, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE131:
+ 286              		.section	.text.HAL_TIM_PeriodElapsedCallback,"ax",%progbits
+ 287              		.align	1
+ARM GAS  /tmp/cctNIZIV.s 			page 7
+
+
+ 288              		.global	HAL_TIM_PeriodElapsedCallback
+ 289              		.syntax unified
+ 290              		.thumb
+ 291              		.thumb_func
+ 292              		.fpu fpv4-sp-d16
+ 294              	HAL_TIM_PeriodElapsedCallback:
+ 295              	.LFB132:
+  65:Src/logic_main.c **** 
+  66:Src/logic_main.c **** void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+ 296              		.loc 1 66 0
+ 297              		.cfi_startproc
+ 298              		@ args = 0, pretend = 0, frame = 0
+ 299              		@ frame_needed = 0, uses_anonymous_args = 0
+ 300              	.LVL13:
+ 301 0000 08B5     		push	{r3, lr}
+ 302              	.LCFI10:
+ 303              		.cfi_def_cfa_offset 8
+ 304              		.cfi_offset 3, -8
+ 305              		.cfi_offset 14, -4
+  67:Src/logic_main.c ****     if(htim->Instance == TIM6){
+ 306              		.loc 1 67 0
+ 307 0002 0268     		ldr	r2, [r0]
+ 308 0004 064B     		ldr	r3, .L26
+ 309 0006 9A42     		cmp	r2, r3
+ 310 0008 03D0     		beq	.L25
+ 311              	.LVL14:
+ 312              	.L23:
+  68:Src/logic_main.c ****         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+  69:Src/logic_main.c ****     }
+  70:Src/logic_main.c ****     init_and_start_htim(&htim6);
+ 313              		.loc 1 70 0
+ 314 000a 0648     		ldr	r0, .L26+4
+ 315 000c FFF7FEFF 		bl	init_and_start_htim
+ 316              	.LVL15:
+  71:Src/logic_main.c **** }
+ 317              		.loc 1 71 0
+ 318 0010 08BD     		pop	{r3, pc}
+ 319              	.LVL16:
+ 320              	.L25:
+  68:Src/logic_main.c ****         HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+ 321              		.loc 1 68 0
+ 322 0012 2021     		movs	r1, #32
+ 323 0014 4FF09040 		mov	r0, #1207959552
+ 324              	.LVL17:
+ 325 0018 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 326              	.LVL18:
+ 327 001c F5E7     		b	.L23
+ 328              	.L27:
+ 329 001e 00BF     		.align	2
+ 330              	.L26:
+ 331 0020 00100040 		.word	1073745920
+ 332 0024 00000000 		.word	htim6
+ 333              		.cfi_endproc
+ 334              	.LFE132:
+ 336              		.section	.text.init_test_B1,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	init_test_B1
+ARM GAS  /tmp/cctNIZIV.s 			page 8
+
+
+ 339              		.syntax unified
+ 340              		.thumb
+ 341              		.thumb_func
+ 342              		.fpu fpv4-sp-d16
+ 344              	init_test_B1:
+ 345              	.LFB133:
+  72:Src/logic_main.c **** 
+  73:Src/logic_main.c **** void init_test_B1(){
+ 346              		.loc 1 73 0
+ 347              		.cfi_startproc
+ 348              		@ args = 0, pretend = 0, frame = 0
+ 349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 350 0000 08B5     		push	{r3, lr}
+ 351              	.LCFI11:
+ 352              		.cfi_def_cfa_offset 8
+ 353              		.cfi_offset 3, -8
+ 354              		.cfi_offset 14, -4
+  74:Src/logic_main.c ****     /*Configure GPIO pin : PC13 - USER BUTTON */
+  75:Src/logic_main.c ****     GPIO_InitStruct.Pin = GPIO_PIN_13;
+ 355              		.loc 1 75 0
+ 356 0002 0649     		ldr	r1, .L30
+ 357 0004 4FF40053 		mov	r3, #8192
+ 358 0008 0B60     		str	r3, [r1]
+  76:Src/logic_main.c ****     GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+ 359              		.loc 1 76 0
+ 360 000a 054B     		ldr	r3, .L30+4
+ 361 000c 4B60     		str	r3, [r1, #4]
+  77:Src/logic_main.c ****     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+ 362              		.loc 1 77 0
+ 363 000e 0223     		movs	r3, #2
+ 364 0010 8B60     		str	r3, [r1, #8]
+  78:Src/logic_main.c ****     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 365              		.loc 1 78 0
+ 366 0012 0448     		ldr	r0, .L30+8
+ 367 0014 FFF7FEFF 		bl	HAL_GPIO_Init
+ 368              	.LVL19:
+  79:Src/logic_main.c **** }
+ 369              		.loc 1 79 0
+ 370 0018 08BD     		pop	{r3, pc}
+ 371              	.L31:
+ 372 001a 00BF     		.align	2
+ 373              	.L30:
+ 374 001c 00000000 		.word	GPIO_InitStruct
+ 375 0020 00001110 		.word	269549568
+ 376 0024 00080048 		.word	1207961600
+ 377              		.cfi_endproc
+ 378              	.LFE133:
+ 380              		.section	.text.init_test_LD5,"ax",%progbits
+ 381              		.align	1
+ 382              		.global	init_test_LD5
+ 383              		.syntax unified
+ 384              		.thumb
+ 385              		.thumb_func
+ 386              		.fpu fpv4-sp-d16
+ 388              	init_test_LD5:
+ 389              	.LFB134:
+  80:Src/logic_main.c **** 
+ARM GAS  /tmp/cctNIZIV.s 			page 9
+
+
+  81:Src/logic_main.c **** void init_test_LD5(){
+ 390              		.loc 1 81 0
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 0
+ 393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 394 0000 08B5     		push	{r3, lr}
+ 395              	.LCFI12:
+ 396              		.cfi_def_cfa_offset 8
+ 397              		.cfi_offset 3, -8
+ 398              		.cfi_offset 14, -4
+  82:Src/logic_main.c ****     /*Configure GPIO pin : PA5 - LD2 LED */
+  83:Src/logic_main.c ****     GPIO_InitStruct.Pin = GPIO_PIN_5;
+ 399              		.loc 1 83 0
+ 400 0002 0849     		ldr	r1, .L34
+ 401 0004 2023     		movs	r3, #32
+ 402 0006 0B60     		str	r3, [r1]
+  84:Src/logic_main.c ****     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 403              		.loc 1 84 0
+ 404 0008 0123     		movs	r3, #1
+ 405 000a 4B60     		str	r3, [r1, #4]
+  85:Src/logic_main.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 406              		.loc 1 85 0
+ 407 000c 0023     		movs	r3, #0
+ 408 000e 8B60     		str	r3, [r1, #8]
+  86:Src/logic_main.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 409              		.loc 1 86 0
+ 410 0010 CB60     		str	r3, [r1, #12]
+  87:Src/logic_main.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 411              		.loc 1 87 0
+ 412 0012 4FF09040 		mov	r0, #1207959552
+ 413 0016 FFF7FEFF 		bl	HAL_GPIO_Init
+ 414              	.LVL20:
+  88:Src/logic_main.c **** 
+  89:Src/logic_main.c ****     HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+ 415              		.loc 1 89 0
+ 416 001a 2820     		movs	r0, #40
+ 417 001c FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 418              	.LVL21:
+  90:Src/logic_main.c **** }
+ 419              		.loc 1 90 0
+ 420 0020 08BD     		pop	{r3, pc}
+ 421              	.L35:
+ 422 0022 00BF     		.align	2
+ 423              	.L34:
+ 424 0024 00000000 		.word	GPIO_InitStruct
+ 425              		.cfi_endproc
+ 426              	.LFE134:
+ 428              		.section	.text.EXTI15_10_IRQHandler,"ax",%progbits
+ 429              		.align	1
+ 430              		.global	EXTI15_10_IRQHandler
+ 431              		.syntax unified
+ 432              		.thumb
+ 433              		.thumb_func
+ 434              		.fpu fpv4-sp-d16
+ 436              	EXTI15_10_IRQHandler:
+ 437              	.LFB135:
+  91:Src/logic_main.c **** 
+ARM GAS  /tmp/cctNIZIV.s 			page 10
+
+
+  92:Src/logic_main.c **** // for B1 EXTI callback
+  93:Src/logic_main.c **** void EXTI15_10_IRQHandler(void) {
+ 438              		.loc 1 93 0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442 0000 08B5     		push	{r3, lr}
+ 443              	.LCFI13:
+ 444              		.cfi_def_cfa_offset 8
+ 445              		.cfi_offset 3, -8
+ 446              		.cfi_offset 14, -4
+  94:Src/logic_main.c ****     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_13);
+ 447              		.loc 1 94 0
+ 448 0002 054B     		ldr	r3, .L38
+ 449 0004 4FF40052 		mov	r2, #8192
+ 450 0008 5A61     		str	r2, [r3, #20]
+  95:Src/logic_main.c ****     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+ 451              		.loc 1 95 0
+ 452 000a 2021     		movs	r1, #32
+ 453 000c 4FF09040 		mov	r0, #1207959552
+ 454 0010 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 455              	.LVL22:
+  96:Src/logic_main.c **** }
+ 456              		.loc 1 96 0
+ 457 0014 08BD     		pop	{r3, pc}
+ 458              	.L39:
+ 459 0016 00BF     		.align	2
+ 460              	.L38:
+ 461 0018 00040140 		.word	1073808384
+ 462              		.cfi_endproc
+ 463              	.LFE135:
+ 465              		.comm	htim6,64,4
+ 466              		.comm	GPIO_InitStruct,20,4
+ 467              		.text
+ 468              	.Letext0:
+ 469              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 470              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 471              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 472              		.file 5 "Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h"
+ 473              		.file 6 "Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xe.h"
+ 474              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 475              		.file 8 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 476              		.file 9 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 477              		.file 10 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 478              		.file 11 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_def.h"
+ 479              		.file 12 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_gpio.h"
+ 480              		.file 13 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h"
+ 481              		.file 14 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h"
+ 482              		.file 15 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart.h"
+ 483              		.file 16 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h"
+ 484              		.file 17 "Inc/usart.h"
+ 485              		.file 18 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_cortex.h"
+ARM GAS  /tmp/cctNIZIV.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 logic_main.c
+     /tmp/cctNIZIV.s:18     .text.init_timer_TIM6:0000000000000000 $t
+     /tmp/cctNIZIV.s:25     .text.init_timer_TIM6:0000000000000000 init_timer_TIM6
+     /tmp/cctNIZIV.s:79     .text.init_timer_TIM6:0000000000000040 $d
+                            *COM*:0000000000000040 htim6
+     /tmp/cctNIZIV.s:86     .text.init_timer_TIM7:0000000000000000 $t
+     /tmp/cctNIZIV.s:93     .text.init_timer_TIM7:0000000000000000 init_timer_TIM7
+     /tmp/cctNIZIV.s:146    .text.init_timer_TIM7:0000000000000040 $d
+     /tmp/cctNIZIV.s:153    .text.TIM6_DAC_IRQHandler:0000000000000000 $t
+     /tmp/cctNIZIV.s:160    .text.TIM6_DAC_IRQHandler:0000000000000000 TIM6_DAC_IRQHandler
+     /tmp/cctNIZIV.s:180    .text.TIM6_DAC_IRQHandler:000000000000000c $d
+     /tmp/cctNIZIV.s:185    .text.init_and_start_htim:0000000000000000 $t
+     /tmp/cctNIZIV.s:192    .text.init_and_start_htim:0000000000000000 init_and_start_htim
+     /tmp/cctNIZIV.s:218    .text.logic_main:0000000000000000 $t
+     /tmp/cctNIZIV.s:225    .text.logic_main:0000000000000000 logic_main
+     /tmp/cctNIZIV.s:249    .text.logic_main:0000000000000010 $d
+     /tmp/cctNIZIV.s:254    .text.deinit_and_stop:0000000000000000 $t
+     /tmp/cctNIZIV.s:261    .text.deinit_and_stop:0000000000000000 deinit_and_stop
+     /tmp/cctNIZIV.s:287    .text.HAL_TIM_PeriodElapsedCallback:0000000000000000 $t
+     /tmp/cctNIZIV.s:294    .text.HAL_TIM_PeriodElapsedCallback:0000000000000000 HAL_TIM_PeriodElapsedCallback
+     /tmp/cctNIZIV.s:331    .text.HAL_TIM_PeriodElapsedCallback:0000000000000020 $d
+     /tmp/cctNIZIV.s:337    .text.init_test_B1:0000000000000000 $t
+     /tmp/cctNIZIV.s:344    .text.init_test_B1:0000000000000000 init_test_B1
+     /tmp/cctNIZIV.s:374    .text.init_test_B1:000000000000001c $d
+                            *COM*:0000000000000014 GPIO_InitStruct
+     /tmp/cctNIZIV.s:381    .text.init_test_LD5:0000000000000000 $t
+     /tmp/cctNIZIV.s:388    .text.init_test_LD5:0000000000000000 init_test_LD5
+     /tmp/cctNIZIV.s:424    .text.init_test_LD5:0000000000000024 $d
+     /tmp/cctNIZIV.s:429    .text.EXTI15_10_IRQHandler:0000000000000000 $t
+     /tmp/cctNIZIV.s:436    .text.EXTI15_10_IRQHandler:0000000000000000 EXTI15_10_IRQHandler
+     /tmp/cctNIZIV.s:461    .text.EXTI15_10_IRQHandler:0000000000000018 $d
+
+UNDEFINED SYMBOLS
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_TIM_IRQHandler
+HAL_TIM_Base_Init
+HAL_TIM_Base_Start_IT
+HAL_TIM_Base_Stop_IT
+HAL_TIM_Base_DeInit
+HAL_GPIO_TogglePin
+HAL_GPIO_Init

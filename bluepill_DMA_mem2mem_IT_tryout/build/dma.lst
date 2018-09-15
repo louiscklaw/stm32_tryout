@@ -1,0 +1,226 @@
+ARM GAS  /tmp/ccnIroHA.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"dma.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.MX_DMA_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	MX_DMA_Init
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	MX_DMA_Init:
+  24              	.LFB66:
+  25              		.file 1 "Src/dma.c"
+   1:Src/dma.c     **** /**
+   2:Src/dma.c     ****   ******************************************************************************
+   3:Src/dma.c     ****   * File Name          : dma.c
+   4:Src/dma.c     ****   * Description        : This file provides code for the configuration
+   5:Src/dma.c     ****   *                      of all the requested memory to memory DMA transfers.
+   6:Src/dma.c     ****   ******************************************************************************
+   7:Src/dma.c     ****   ** This notice applies to any and all portions of this file
+   8:Src/dma.c     ****   * that are not between comment pairs USER CODE BEGIN and
+   9:Src/dma.c     ****   * USER CODE END. Other portions of this file, whether 
+  10:Src/dma.c     ****   * inserted by the user or by software development tools
+  11:Src/dma.c     ****   * are owned by their respective copyright owners.
+  12:Src/dma.c     ****   *
+  13:Src/dma.c     ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  14:Src/dma.c     ****   *
+  15:Src/dma.c     ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:Src/dma.c     ****   * are permitted provided that the following conditions are met:
+  17:Src/dma.c     ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:Src/dma.c     ****   *      this list of conditions and the following disclaimer.
+  19:Src/dma.c     ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:Src/dma.c     ****   *      this list of conditions and the following disclaimer in the documentation
+  21:Src/dma.c     ****   *      and/or other materials provided with the distribution.
+  22:Src/dma.c     ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:Src/dma.c     ****   *      may be used to endorse or promote products derived from this software
+  24:Src/dma.c     ****   *      without specific prior written permission.
+  25:Src/dma.c     ****   *
+  26:Src/dma.c     ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:Src/dma.c     ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:Src/dma.c     ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:Src/dma.c     ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:Src/dma.c     ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:Src/dma.c     ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  32:Src/dma.c     ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:Src/dma.c     ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ARM GAS  /tmp/ccnIroHA.s 			page 2
+
+
+  34:Src/dma.c     ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:Src/dma.c     ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:Src/dma.c     ****   *
+  37:Src/dma.c     ****   ******************************************************************************
+  38:Src/dma.c     ****   */
+  39:Src/dma.c     **** /* Includes ------------------------------------------------------------------*/
+  40:Src/dma.c     **** #include "dma.h"
+  41:Src/dma.c     **** 
+  42:Src/dma.c     **** /* USER CODE BEGIN 0 */
+  43:Src/dma.c     **** 
+  44:Src/dma.c     **** /* USER CODE END 0 */
+  45:Src/dma.c     **** 
+  46:Src/dma.c     **** /*----------------------------------------------------------------------------*/
+  47:Src/dma.c     **** /* Configure DMA                                                              */
+  48:Src/dma.c     **** /*----------------------------------------------------------------------------*/
+  49:Src/dma.c     **** 
+  50:Src/dma.c     **** /* USER CODE BEGIN 1 */
+  51:Src/dma.c     **** 
+  52:Src/dma.c     **** /* USER CODE END 1 */
+  53:Src/dma.c     **** DMA_HandleTypeDef hdma_memtomem_dma1_channel1;
+  54:Src/dma.c     **** 
+  55:Src/dma.c     **** /** 
+  56:Src/dma.c     ****   * Enable DMA controller clock
+  57:Src/dma.c     ****   * Configure DMA for memory to memory transfers
+  58:Src/dma.c     ****   *   hdma_memtomem_dma1_channel1
+  59:Src/dma.c     ****   */
+  60:Src/dma.c     **** void MX_DMA_Init(void) 
+  61:Src/dma.c     **** {
+  26              		.loc 1 61 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30 0000 00B5     		push	{lr}
+  31              	.LCFI0:
+  32              		.cfi_def_cfa_offset 4
+  33              		.cfi_offset 14, -4
+  34 0002 83B0     		sub	sp, sp, #12
+  35              	.LCFI1:
+  36              		.cfi_def_cfa_offset 16
+  37              	.LBB2:
+  62:Src/dma.c     ****   /* DMA controller clock enable */
+  63:Src/dma.c     ****   __HAL_RCC_DMA1_CLK_ENABLE();
+  38              		.loc 1 63 0
+  39 0004 114B     		ldr	r3, .L5
+  40 0006 5A69     		ldr	r2, [r3, #20]
+  41 0008 42F00102 		orr	r2, r2, #1
+  42 000c 5A61     		str	r2, [r3, #20]
+  43 000e 5B69     		ldr	r3, [r3, #20]
+  44 0010 03F00103 		and	r3, r3, #1
+  45 0014 0193     		str	r3, [sp, #4]
+  46 0016 019B     		ldr	r3, [sp, #4]
+  47              	.LBE2:
+  64:Src/dma.c     **** 
+  65:Src/dma.c     ****   /* Configure DMA request hdma_memtomem_dma1_channel1 on DMA1_Channel1 */
+  66:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Instance = DMA1_Channel1;
+  48              		.loc 1 66 0
+  49 0018 0D48     		ldr	r0, .L5+4
+ARM GAS  /tmp/ccnIroHA.s 			page 3
+
+
+  50 001a 0E4B     		ldr	r3, .L5+8
+  51 001c 0360     		str	r3, [r0]
+  67:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.Direction = DMA_MEMORY_TO_MEMORY;
+  52              		.loc 1 67 0
+  53 001e 4FF48043 		mov	r3, #16384
+  54 0022 4360     		str	r3, [r0, #4]
+  68:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.PeriphInc = DMA_PINC_ENABLE;
+  55              		.loc 1 68 0
+  56 0024 4023     		movs	r3, #64
+  57 0026 8360     		str	r3, [r0, #8]
+  69:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.MemInc = DMA_MINC_ENABLE;
+  58              		.loc 1 69 0
+  59 0028 8023     		movs	r3, #128
+  60 002a C360     		str	r3, [r0, #12]
+  70:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  61              		.loc 1 70 0
+  62 002c 0023     		movs	r3, #0
+  63 002e 0361     		str	r3, [r0, #16]
+  71:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+  64              		.loc 1 71 0
+  65 0030 4361     		str	r3, [r0, #20]
+  72:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.Mode = DMA_NORMAL;
+  66              		.loc 1 72 0
+  67 0032 8361     		str	r3, [r0, #24]
+  73:Src/dma.c     ****   hdma_memtomem_dma1_channel1.Init.Priority = DMA_PRIORITY_LOW;
+  68              		.loc 1 73 0
+  69 0034 C361     		str	r3, [r0, #28]
+  74:Src/dma.c     ****   if (HAL_DMA_Init(&hdma_memtomem_dma1_channel1) != HAL_OK)
+  70              		.loc 1 74 0
+  71 0036 FFF7FEFF 		bl	HAL_DMA_Init
+  72              	.LVL0:
+  73 003a 10B9     		cbnz	r0, .L4
+  74              	.L1:
+  75:Src/dma.c     ****   {
+  76:Src/dma.c     ****     _Error_Handler(__FILE__, __LINE__);
+  77:Src/dma.c     ****   }
+  78:Src/dma.c     **** 
+  79:Src/dma.c     **** }
+  75              		.loc 1 79 0
+  76 003c 03B0     		add	sp, sp, #12
+  77              	.LCFI2:
+  78              		.cfi_remember_state
+  79              		.cfi_def_cfa_offset 4
+  80              		@ sp needed
+  81 003e 5DF804FB 		ldr	pc, [sp], #4
+  82              	.L4:
+  83              	.LCFI3:
+  84              		.cfi_restore_state
+  76:Src/dma.c     ****   }
+  85              		.loc 1 76 0
+  86 0042 4C21     		movs	r1, #76
+  87 0044 0448     		ldr	r0, .L5+12
+  88 0046 FFF7FEFF 		bl	_Error_Handler
+  89              	.LVL1:
+  90              		.loc 1 79 0
+  91 004a F7E7     		b	.L1
+  92              	.L6:
+ARM GAS  /tmp/ccnIroHA.s 			page 4
+
+
+  93              		.align	2
+  94              	.L5:
+  95 004c 00100240 		.word	1073876992
+  96 0050 00000000 		.word	hdma_memtomem_dma1_channel1
+  97 0054 08000240 		.word	1073872904
+  98 0058 00000000 		.word	.LC0
+  99              		.cfi_endproc
+ 100              	.LFE66:
+ 102              		.comm	hdma_memtomem_dma1_channel1,68,4
+ 103              		.section	.rodata.MX_DMA_Init.str1.4,"aMS",%progbits,1
+ 104              		.align	2
+ 105              	.LC0:
+ 106 0000 5372632F 		.ascii	"Src/dma.c\000"
+ 106      646D612E 
+ 106      6300
+ 107              		.text
+ 108              	.Letext0:
+ 109              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 110              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 111              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
+ 112              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 113              		.file 6 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 114              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 115              		.file 8 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 116              		.file 9 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 117              		.file 10 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 118              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 119              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 120              		.file 13 "Inc/dma.h"
+ARM GAS  /tmp/ccnIroHA.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 dma.c
+     /tmp/ccnIroHA.s:16     .text.MX_DMA_Init:0000000000000000 $t
+     /tmp/ccnIroHA.s:23     .text.MX_DMA_Init:0000000000000000 MX_DMA_Init
+     /tmp/ccnIroHA.s:95     .text.MX_DMA_Init:000000000000004c $d
+                            *COM*:0000000000000044 hdma_memtomem_dma1_channel1
+     /tmp/ccnIroHA.s:104    .rodata.MX_DMA_Init.str1.4:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_DMA_Init
+_Error_Handler

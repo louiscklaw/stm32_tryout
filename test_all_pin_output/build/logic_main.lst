@@ -1,0 +1,180 @@
+ARM GAS  /tmp/cciXQ4si.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"logic_main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.main,"ax",%progbits
+  16              		.align	1
+  17              		.global	main
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	main:
+  24              	.LFB66:
+  25              		.file 1 "Src/logic_main.c"
+   1:Src/logic_main.c **** 
+   2:Src/logic_main.c **** #include "main.h"
+   3:Src/logic_main.c **** #include "stm32f1xx_hal.h"
+   4:Src/logic_main.c **** #include "gpio.h"
+   5:Src/logic_main.c **** 
+   6:Src/logic_main.c **** void init_test_PC13(void);
+   7:Src/logic_main.c **** GPIO_InitTypeDef GPIO_InitStruct;
+   8:Src/logic_main.c **** 
+   9:Src/logic_main.c **** uint16_t PORTA_ALL_PIN = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 |
+  10:Src/logic_main.c ****                 GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7 |
+  11:Src/logic_main.c ****                 GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11 |
+  12:Src/logic_main.c ****                 GPIO_PIN_12|GPIO_PIN_15;
+  13:Src/logic_main.c **** 
+  14:Src/logic_main.c **** uint16_t PORTB_ALL_PIN = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 |
+  15:Src/logic_main.c ****                 GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7 |
+  16:Src/logic_main.c ****                 GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11 |
+  17:Src/logic_main.c ****                 GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+  18:Src/logic_main.c **** 
+  19:Src/logic_main.c **** uint16_t PORTC_ALL_PIN = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 |
+  20:Src/logic_main.c ****                 GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7 |
+  21:Src/logic_main.c ****                 GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11 |
+  22:Src/logic_main.c ****                 GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+  23:Src/logic_main.c **** 
+  24:Src/logic_main.c **** int main(void);
+  25:Src/logic_main.c **** 
+  26:Src/logic_main.c **** int main(void){
+  26              		.loc 1 26 0
+  27              		.cfi_startproc
+  28              		@ Volatile: function does not return.
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              	.LCFI0:
+ARM GAS  /tmp/cciXQ4si.s 			page 2
+
+
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+  27:Src/logic_main.c **** 
+  28:Src/logic_main.c ****     HAL_Init();
+  36              		.loc 1 28 0
+  37 0002 FFF7FEFF 		bl	HAL_Init
+  38              	.LVL0:
+  29:Src/logic_main.c **** 
+  30:Src/logic_main.c ****     SystemClock_Config();
+  39              		.loc 1 30 0
+  40 0006 FFF7FEFF 		bl	SystemClock_Config
+  41              	.LVL1:
+  31:Src/logic_main.c **** 
+  32:Src/logic_main.c ****     MX_GPIO_Init();
+  42              		.loc 1 32 0
+  43 000a FFF7FEFF 		bl	MX_GPIO_Init
+  44              	.LVL2:
+  45              	.L2:
+  33:Src/logic_main.c **** 
+  34:Src/logic_main.c ****     while(1){
+  35:Src/logic_main.c ****         HAL_GPIO_TogglePin(GPIOA, PORTA_ALL_PIN);
+  46              		.loc 1 35 0 discriminator 1
+  47 000e 094B     		ldr	r3, .L4
+  48 0010 1988     		ldrh	r1, [r3]
+  49 0012 0948     		ldr	r0, .L4+4
+  50 0014 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  51              	.LVL3:
+  36:Src/logic_main.c ****         HAL_GPIO_TogglePin(GPIOB, PORTB_ALL_PIN);
+  52              		.loc 1 36 0 discriminator 1
+  53 0018 084B     		ldr	r3, .L4+8
+  54 001a 1988     		ldrh	r1, [r3]
+  55 001c 0848     		ldr	r0, .L4+12
+  56 001e FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  57              	.LVL4:
+  37:Src/logic_main.c ****         HAL_GPIO_TogglePin(GPIOC, PORTC_ALL_PIN);
+  58              		.loc 1 37 0 discriminator 1
+  59 0022 084B     		ldr	r3, .L4+16
+  60 0024 1988     		ldrh	r1, [r3]
+  61 0026 0848     		ldr	r0, .L4+20
+  62 0028 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  63              	.LVL5:
+  38:Src/logic_main.c ****         HAL_Delay(10);
+  64              		.loc 1 38 0 discriminator 1
+  65 002c 0A20     		movs	r0, #10
+  66 002e FFF7FEFF 		bl	HAL_Delay
+  67              	.LVL6:
+  68 0032 ECE7     		b	.L2
+  69              	.L5:
+  70              		.align	2
+  71              	.L4:
+  72 0034 00000000 		.word	.LANCHOR0
+  73 0038 00080140 		.word	1073809408
+  74 003c 00000000 		.word	.LANCHOR1
+  75 0040 000C0140 		.word	1073810432
+  76 0044 00000000 		.word	.LANCHOR2
+  77 0048 00100140 		.word	1073811456
+ARM GAS  /tmp/cciXQ4si.s 			page 3
+
+
+  78              		.cfi_endproc
+  79              	.LFE66:
+  81              		.global	PORTC_ALL_PIN
+  82              		.global	PORTB_ALL_PIN
+  83              		.global	PORTA_ALL_PIN
+  84              		.comm	GPIO_InitStruct,16,4
+  85              		.section	.data.PORTA_ALL_PIN,"aw",%progbits
+  86              		.align	1
+  87              		.set	.LANCHOR0,. + 0
+  90              	PORTA_ALL_PIN:
+  91 0000 FF9F     		.short	-24577
+  92              		.section	.data.PORTB_ALL_PIN,"aw",%progbits
+  93              		.align	1
+  94              		.set	.LANCHOR1,. + 0
+  97              	PORTB_ALL_PIN:
+  98 0000 FFFF     		.short	-1
+  99              		.section	.data.PORTC_ALL_PIN,"aw",%progbits
+ 100              		.align	1
+ 101              		.set	.LANCHOR2,. + 0
+ 104              	PORTC_ALL_PIN:
+ 105 0000 FFFF     		.short	-1
+ 106              		.text
+ 107              	.Letext0:
+ 108              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 109              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 110              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
+ 111              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 112              		.file 6 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 113              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 114              		.file 8 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 115              		.file 9 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 116              		.file 10 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 117              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 118              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 119              		.file 13 "Inc/gpio.h"
+ARM GAS  /tmp/cciXQ4si.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 logic_main.c
+     /tmp/cciXQ4si.s:16     .text.main:0000000000000000 $t
+     /tmp/cciXQ4si.s:23     .text.main:0000000000000000 main
+     /tmp/cciXQ4si.s:72     .text.main:0000000000000034 $d
+     /tmp/cciXQ4si.s:104    .data.PORTC_ALL_PIN:0000000000000000 PORTC_ALL_PIN
+     /tmp/cciXQ4si.s:97     .data.PORTB_ALL_PIN:0000000000000000 PORTB_ALL_PIN
+     /tmp/cciXQ4si.s:90     .data.PORTA_ALL_PIN:0000000000000000 PORTA_ALL_PIN
+                            *COM*:0000000000000010 GPIO_InitStruct
+     /tmp/cciXQ4si.s:86     .data.PORTA_ALL_PIN:0000000000000000 $d
+     /tmp/cciXQ4si.s:93     .data.PORTB_ALL_PIN:0000000000000000 $d
+     /tmp/cciXQ4si.s:100    .data.PORTC_ALL_PIN:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_Init
+SystemClock_Config
+MX_GPIO_Init
+HAL_GPIO_TogglePin
+HAL_Delay

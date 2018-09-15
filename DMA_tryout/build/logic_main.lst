@@ -1,0 +1,292 @@
+ARM GAS  /tmp/ccOTZXaz.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"logic_main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_DMA_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_DMA_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	MX_DMA_Init:
+  26              	.LFB127:
+  27              		.file 1 "Src/logic_main.c"
+   1:Src/logic_main.c **** 
+   2:Src/logic_main.c **** #include "main.h"
+   3:Src/logic_main.c **** #include "stm32f3xx_hal.h"
+   4:Src/logic_main.c **** #include "usart.h"
+   5:Src/logic_main.c **** #include "gpio.h"
+   6:Src/logic_main.c **** #include "stm32f3xx_hal_tim.h"
+   7:Src/logic_main.c **** #include "stm32_hal_legacy.h"
+   8:Src/logic_main.c **** 
+   9:Src/logic_main.c **** UART_HandleTypeDef huart2;
+  10:Src/logic_main.c **** DMA_HandleTypeDef hdma_usart2_tx;
+  11:Src/logic_main.c **** char *msg = "Hello STM32 Lovers! This message is transferred in DMA Mode.\r\n";
+  12:Src/logic_main.c **** 
+  13:Src/logic_main.c **** void logic_main(void){
+  14:Src/logic_main.c **** 
+  15:Src/logic_main.c ****     MX_DMA_Init();
+  16:Src/logic_main.c ****     MX_USART2_UART_Init();
+  17:Src/logic_main.c **** 
+  18:Src/logic_main.c ****     hdma_usart2_tx.Instance = DMA1_Channel7;
+  19:Src/logic_main.c ****     hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+  20:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+  21:Src/logic_main.c ****     hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+  22:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  23:Src/logic_main.c ****     hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+  24:Src/logic_main.c ****     hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+  25:Src/logic_main.c ****     hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+  26:Src/logic_main.c ****     HAL_DMA_Init(&hdma_usart2_tx);
+  27:Src/logic_main.c **** 
+  28:Src/logic_main.c ****     while (1){
+  29:Src/logic_main.c ****         HAL_DMA_Start(&hdma_usart2_tx,  (uint32_t)msg,  (uint32_t)&huart2.Instance->TDR, strlen(msg
+  30:Src/logic_main.c ****         //Enable UART in DMA mode
+  31:Src/logic_main.c ****         huart2.Instance->CR3 |= USART_CR3_DMAT;
+ARM GAS  /tmp/ccOTZXaz.s 			page 2
+
+
+  32:Src/logic_main.c ****         //Wait for transfer complete
+  33:Src/logic_main.c ****         HAL_DMA_PollForTransfer(&hdma_usart2_tx, HAL_DMA_FULL_TRANSFER, HAL_MAX_DELAY);
+  34:Src/logic_main.c ****         //Disable UART DMA mode
+  35:Src/logic_main.c ****         huart2.Instance->CR3 &= ~USART_CR3_DMAT;
+  36:Src/logic_main.c ****     }
+  37:Src/logic_main.c **** 
+  38:Src/logic_main.c **** 
+  39:Src/logic_main.c **** 
+  40:Src/logic_main.c ****     //Turn LD2 ON
+  41:Src/logic_main.c ****     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+  42:Src/logic_main.c **** 
+  43:Src/logic_main.c **** 
+  44:Src/logic_main.c **** }
+  45:Src/logic_main.c **** 
+  46:Src/logic_main.c **** void MX_DMA_Init(void)
+  47:Src/logic_main.c **** {
+  28              		.loc 1 47 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 82B0     		sub	sp, sp, #8
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              	.LBB2:
+  48:Src/logic_main.c ****   /* DMA controller clock enable */
+  49:Src/logic_main.c ****   __DMA1_CLK_ENABLE();
+  37              		.loc 1 49 0
+  38 0002 064B     		ldr	r3, .L3
+  39 0004 5A69     		ldr	r2, [r3, #20]
+  40 0006 42F00102 		orr	r2, r2, #1
+  41 000a 5A61     		str	r2, [r3, #20]
+  42 000c 5B69     		ldr	r3, [r3, #20]
+  43 000e 03F00103 		and	r3, r3, #1
+  44 0012 0193     		str	r3, [sp, #4]
+  45 0014 019B     		ldr	r3, [sp, #4]
+  46              	.LBE2:
+  50:Src/logic_main.c **** }
+  47              		.loc 1 50 0
+  48 0016 02B0     		add	sp, sp, #8
+  49              	.LCFI1:
+  50              		.cfi_def_cfa_offset 0
+  51              		@ sp needed
+  52 0018 7047     		bx	lr
+  53              	.L4:
+  54 001a 00BF     		.align	2
+  55              	.L3:
+  56 001c 00100240 		.word	1073876992
+  57              		.cfi_endproc
+  58              	.LFE127:
+  60              		.section	.text.logic_main,"ax",%progbits
+  61              		.align	1
+  62              		.global	logic_main
+  63              		.syntax unified
+  64              		.thumb
+  65              		.thumb_func
+  66              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccOTZXaz.s 			page 3
+
+
+  68              	logic_main:
+  69              	.LFB126:
+  13:Src/logic_main.c **** 
+  70              		.loc 1 13 0
+  71              		.cfi_startproc
+  72              		@ Volatile: function does not return.
+  73              		@ args = 0, pretend = 0, frame = 0
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  75 0000 80B5     		push	{r7, lr}
+  76              	.LCFI2:
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 7, -8
+  79              		.cfi_offset 14, -4
+  15:Src/logic_main.c ****     MX_USART2_UART_Init();
+  80              		.loc 1 15 0
+  81 0002 FFF7FEFF 		bl	MX_DMA_Init
+  82              	.LVL0:
+  16:Src/logic_main.c **** 
+  83              		.loc 1 16 0
+  84 0006 FFF7FEFF 		bl	MX_USART2_UART_Init
+  85              	.LVL1:
+  18:Src/logic_main.c ****     hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+  86              		.loc 1 18 0
+  87 000a 1748     		ldr	r0, .L8
+  88 000c 174B     		ldr	r3, .L8+4
+  89 000e 0360     		str	r3, [r0]
+  19:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+  90              		.loc 1 19 0
+  91 0010 1023     		movs	r3, #16
+  92 0012 4360     		str	r3, [r0, #4]
+  20:Src/logic_main.c ****     hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+  93              		.loc 1 20 0
+  94 0014 0023     		movs	r3, #0
+  95 0016 8360     		str	r3, [r0, #8]
+  21:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  96              		.loc 1 21 0
+  97 0018 8022     		movs	r2, #128
+  98 001a C260     		str	r2, [r0, #12]
+  22:Src/logic_main.c ****     hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+  99              		.loc 1 22 0
+ 100 001c 0361     		str	r3, [r0, #16]
+  23:Src/logic_main.c ****     hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+ 101              		.loc 1 23 0
+ 102 001e 4361     		str	r3, [r0, #20]
+  24:Src/logic_main.c ****     hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+ 103              		.loc 1 24 0
+ 104 0020 8361     		str	r3, [r0, #24]
+  25:Src/logic_main.c ****     HAL_DMA_Init(&hdma_usart2_tx);
+ 105              		.loc 1 25 0
+ 106 0022 C361     		str	r3, [r0, #28]
+  26:Src/logic_main.c **** 
+ 107              		.loc 1 26 0
+ 108 0024 FFF7FEFF 		bl	HAL_DMA_Init
+ 109              	.LVL2:
+ 110              	.L6:
+ 111              	.LBB3:
+  29:Src/logic_main.c ****         //Enable UART in DMA mode
+ARM GAS  /tmp/ccOTZXaz.s 			page 4
+
+
+ 112              		.loc 1 29 0 discriminator 1
+ 113 0028 114B     		ldr	r3, .L8+8
+ 114 002a 1F68     		ldr	r7, [r3]
+ 115 002c 114C     		ldr	r4, .L8+12
+ 116 002e 2568     		ldr	r5, [r4]
+ 117 0030 2835     		adds	r5, r5, #40
+ 118 0032 3846     		mov	r0, r7
+ 119 0034 FFF7FEFF 		bl	strlen
+ 120              	.LVL3:
+ 121 0038 0B4E     		ldr	r6, .L8
+ 122 003a 0346     		mov	r3, r0
+ 123 003c 2A46     		mov	r2, r5
+ 124 003e 3946     		mov	r1, r7
+ 125 0040 3046     		mov	r0, r6
+ 126 0042 FFF7FEFF 		bl	HAL_DMA_Start
+ 127              	.LVL4:
+  31:Src/logic_main.c ****         //Wait for transfer complete
+ 128              		.loc 1 31 0 discriminator 1
+ 129 0046 2268     		ldr	r2, [r4]
+ 130 0048 9368     		ldr	r3, [r2, #8]
+ 131 004a 43F08003 		orr	r3, r3, #128
+ 132 004e 9360     		str	r3, [r2, #8]
+  33:Src/logic_main.c ****         //Disable UART DMA mode
+ 133              		.loc 1 33 0 discriminator 1
+ 134 0050 4FF0FF32 		mov	r2, #-1
+ 135 0054 0021     		movs	r1, #0
+ 136 0056 3046     		mov	r0, r6
+ 137 0058 FFF7FEFF 		bl	HAL_DMA_PollForTransfer
+ 138              	.LVL5:
+  35:Src/logic_main.c ****     }
+ 139              		.loc 1 35 0 discriminator 1
+ 140 005c 2268     		ldr	r2, [r4]
+ 141 005e 9368     		ldr	r3, [r2, #8]
+ 142 0060 23F08003 		bic	r3, r3, #128
+ 143 0064 9360     		str	r3, [r2, #8]
+ 144 0066 DFE7     		b	.L6
+ 145              	.L9:
+ 146              		.align	2
+ 147              	.L8:
+ 148 0068 00000000 		.word	hdma_usart2_tx
+ 149 006c 80000240 		.word	1073873024
+ 150 0070 00000000 		.word	.LANCHOR0
+ 151 0074 00000000 		.word	huart2
+ 152              	.LBE3:
+ 153              		.cfi_endproc
+ 154              	.LFE126:
+ 156              		.global	msg
+ 157              		.comm	hdma_usart2_tx,68,4
+ 158              		.comm	huart2,112,4
+ 159              		.section	.data.msg,"aw",%progbits
+ 160              		.align	2
+ 161              		.set	.LANCHOR0,. + 0
+ 164              	msg:
+ 165 0000 00000000 		.word	.LC0
+ 166              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 167              		.align	2
+ 168              	.LC0:
+ARM GAS  /tmp/ccOTZXaz.s 			page 5
+
+
+ 169 0000 48656C6C 		.ascii	"Hello STM32 Lovers! This message is transferred in "
+ 169      6F205354 
+ 169      4D333220 
+ 169      4C6F7665 
+ 169      72732120 
+ 170 0033 444D4120 		.ascii	"DMA Mode.\015\012\000"
+ 170      4D6F6465 
+ 170      2E0D0A00 
+ 171              		.text
+ 172              	.Letext0:
+ 173              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 174              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 175              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 176              		.file 5 "Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h"
+ 177              		.file 6 "Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xe.h"
+ 178              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 179              		.file 8 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 180              		.file 9 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 181              		.file 10 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 182              		.file 11 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_def.h"
+ 183              		.file 12 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_gpio.h"
+ 184              		.file 13 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_dma.h"
+ 185              		.file 14 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart.h"
+ 186              		.file 15 "Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h"
+ 187              		.file 16 "Inc/usart.h"
+ 188              		.file 17 "<built-in>"
+ARM GAS  /tmp/ccOTZXaz.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 logic_main.c
+     /tmp/ccOTZXaz.s:18     .text.MX_DMA_Init:0000000000000000 $t
+     /tmp/ccOTZXaz.s:25     .text.MX_DMA_Init:0000000000000000 MX_DMA_Init
+     /tmp/ccOTZXaz.s:56     .text.MX_DMA_Init:000000000000001c $d
+     /tmp/ccOTZXaz.s:61     .text.logic_main:0000000000000000 $t
+     /tmp/ccOTZXaz.s:68     .text.logic_main:0000000000000000 logic_main
+     /tmp/ccOTZXaz.s:148    .text.logic_main:0000000000000068 $d
+                            *COM*:0000000000000044 hdma_usart2_tx
+                            *COM*:0000000000000070 huart2
+     /tmp/ccOTZXaz.s:164    .data.msg:0000000000000000 msg
+     /tmp/ccOTZXaz.s:160    .data.msg:0000000000000000 $d
+     /tmp/ccOTZXaz.s:167    .rodata.str1.4:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+MX_USART2_UART_Init
+HAL_DMA_Init
+strlen
+HAL_DMA_Start
+HAL_DMA_PollForTransfer

@@ -1,0 +1,283 @@
+ARM GAS  /tmp/ccu8P1LS.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"logic_main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.get_random_integer,"ax",%progbits
+  16              		.align	1
+  17              		.global	get_random_integer
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	get_random_integer:
+  24              	.LFB67:
+  25              		.file 1 "Src/logic_main.c"
+   1:Src/logic_main.c **** 
+   2:Src/logic_main.c **** #include <string.h>
+   3:Src/logic_main.c **** #include <stdlib.h>
+   4:Src/logic_main.c **** #include <time.h>
+   5:Src/logic_main.c **** 
+   6:Src/logic_main.c **** #include "main.h"
+   7:Src/logic_main.c **** #include "stm32f1xx_hal.h"
+   8:Src/logic_main.c **** #include "usart.h"
+   9:Src/logic_main.c **** #include "gpio.h"
+  10:Src/logic_main.c **** 
+  11:Src/logic_main.c **** char test_msg[1];
+  12:Src/logic_main.c **** uint8_t test_send_int ;
+  13:Src/logic_main.c **** char  readBuf[1];
+  14:Src/logic_main.c **** uint8_t test_receive_int = 9;
+  15:Src/logic_main.c **** 
+  16:Src/logic_main.c **** int main(void);
+  17:Src/logic_main.c **** int get_random_integer(uint8_t MAX_INT);
+  18:Src/logic_main.c **** 
+  19:Src/logic_main.c **** // init_stm32_main_template
+  20:Src/logic_main.c **** int main(void){
+  21:Src/logic_main.c ****     HAL_Init();
+  22:Src/logic_main.c **** 
+  23:Src/logic_main.c ****     SystemClock_Config();
+  24:Src/logic_main.c **** 
+  25:Src/logic_main.c ****     MX_GPIO_Init();
+  26:Src/logic_main.c ****     MX_USART2_UART_Init();
+  27:Src/logic_main.c **** 
+  28:Src/logic_main.c ****     srand(time(NULL));
+  29:Src/logic_main.c **** 
+  30:Src/logic_main.c ****     while (1){
+  31:Src/logic_main.c ****         test_send_int = get_random_integer(9);
+  32:Src/logic_main.c ****         itoa(test_send_int, test_msg, 10);
+  33:Src/logic_main.c **** 
+ARM GAS  /tmp/ccu8P1LS.s 			page 2
+
+
+  34:Src/logic_main.c ****         HAL_UART_Transmit(&huart2, (uint8_t*)test_msg, 1, HAL_MAX_DELAY);
+  35:Src/logic_main.c ****         HAL_UART_Receive(&huart2, (uint8_t*)readBuf, 1, HAL_MAX_DELAY);
+  36:Src/logic_main.c ****         test_receive_int = atoi(readBuf);
+  37:Src/logic_main.c **** 
+  38:Src/logic_main.c ****         if (test_send_int == test_receive_int){
+  39:Src/logic_main.c ****             HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+  40:Src/logic_main.c ****         }else{
+  41:Src/logic_main.c **** 
+  42:Src/logic_main.c ****         }
+  43:Src/logic_main.c **** 
+  44:Src/logic_main.c ****         HAL_Delay(2);
+  45:Src/logic_main.c ****     }
+  46:Src/logic_main.c ****     return 0;
+  47:Src/logic_main.c **** }
+  48:Src/logic_main.c **** 
+  49:Src/logic_main.c **** int get_random_integer(uint8_t MAX_INT){
+  26              		.loc 1 49 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36 0002 0446     		mov	r4, r0
+  50:Src/logic_main.c ****     return rand() % MAX_INT;
+  37              		.loc 1 50 0
+  38 0004 FFF7FEFF 		bl	rand
+  39              	.LVL1:
+  40 0008 90FBF4F3 		sdiv	r3, r0, r4
+  51:Src/logic_main.c **** }
+  41              		.loc 1 51 0
+  42 000c 04FB1300 		mls	r0, r4, r3, r0
+  43 0010 10BD     		pop	{r4, pc}
+  44              		.cfi_endproc
+  45              	.LFE67:
+  47              		.section	.text.main,"ax",%progbits
+  48              		.align	1
+  49              		.global	main
+  50              		.syntax unified
+  51              		.thumb
+  52              		.thumb_func
+  53              		.fpu softvfp
+  55              	main:
+  56              	.LFB66:
+  20:Src/logic_main.c ****     HAL_Init();
+  57              		.loc 1 20 0
+  58              		.cfi_startproc
+  59              		@ Volatile: function does not return.
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62 0000 08B5     		push	{r3, lr}
+  63              	.LCFI1:
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 3, -8
+ARM GAS  /tmp/ccu8P1LS.s 			page 3
+
+
+  66              		.cfi_offset 14, -4
+  21:Src/logic_main.c **** 
+  67              		.loc 1 21 0
+  68 0002 FFF7FEFF 		bl	HAL_Init
+  69              	.LVL2:
+  23:Src/logic_main.c **** 
+  70              		.loc 1 23 0
+  71 0006 FFF7FEFF 		bl	SystemClock_Config
+  72              	.LVL3:
+  25:Src/logic_main.c ****     MX_USART2_UART_Init();
+  73              		.loc 1 25 0
+  74 000a FFF7FEFF 		bl	MX_GPIO_Init
+  75              	.LVL4:
+  26:Src/logic_main.c **** 
+  76              		.loc 1 26 0
+  77 000e FFF7FEFF 		bl	MX_USART2_UART_Init
+  78              	.LVL5:
+  28:Src/logic_main.c **** 
+  79              		.loc 1 28 0
+  80 0012 0020     		movs	r0, #0
+  81 0014 FFF7FEFF 		bl	time
+  82              	.LVL6:
+  83 0018 FFF7FEFF 		bl	srand
+  84              	.LVL7:
+  85 001c 02E0     		b	.L5
+  86              	.L4:
+  44:Src/logic_main.c ****     }
+  87              		.loc 1 44 0
+  88 001e 0220     		movs	r0, #2
+  89 0020 FFF7FEFF 		bl	HAL_Delay
+  90              	.LVL8:
+  91              	.L5:
+  31:Src/logic_main.c ****         itoa(test_send_int, test_msg, 10);
+  92              		.loc 1 31 0
+  93 0024 0920     		movs	r0, #9
+  94 0026 FFF7FEFF 		bl	get_random_integer
+  95              	.LVL9:
+  96 002a C0B2     		uxtb	r0, r0
+  97 002c 124C     		ldr	r4, .L7
+  98 002e 2070     		strb	r0, [r4]
+  32:Src/logic_main.c **** 
+  99              		.loc 1 32 0
+ 100 0030 124D     		ldr	r5, .L7+4
+ 101 0032 0A22     		movs	r2, #10
+ 102 0034 2946     		mov	r1, r5
+ 103 0036 FFF7FEFF 		bl	itoa
+ 104              	.LVL10:
+  34:Src/logic_main.c ****         HAL_UART_Receive(&huart2, (uint8_t*)readBuf, 1, HAL_MAX_DELAY);
+ 105              		.loc 1 34 0
+ 106 003a 114E     		ldr	r6, .L7+8
+ 107 003c 4FF0FF33 		mov	r3, #-1
+ 108 0040 0122     		movs	r2, #1
+ 109 0042 2946     		mov	r1, r5
+ 110 0044 3046     		mov	r0, r6
+ 111 0046 FFF7FEFF 		bl	HAL_UART_Transmit
+ 112              	.LVL11:
+  35:Src/logic_main.c ****         test_receive_int = atoi(readBuf);
+ARM GAS  /tmp/ccu8P1LS.s 			page 4
+
+
+ 113              		.loc 1 35 0
+ 114 004a 0E4D     		ldr	r5, .L7+12
+ 115 004c 4FF0FF33 		mov	r3, #-1
+ 116 0050 0122     		movs	r2, #1
+ 117 0052 2946     		mov	r1, r5
+ 118 0054 3046     		mov	r0, r6
+ 119 0056 FFF7FEFF 		bl	HAL_UART_Receive
+ 120              	.LVL12:
+  36:Src/logic_main.c **** 
+ 121              		.loc 1 36 0
+ 122 005a 2846     		mov	r0, r5
+ 123 005c FFF7FEFF 		bl	atoi
+ 124              	.LVL13:
+ 125 0060 C0B2     		uxtb	r0, r0
+ 126 0062 094B     		ldr	r3, .L7+16
+ 127 0064 1870     		strb	r0, [r3]
+  38:Src/logic_main.c ****             HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+ 128              		.loc 1 38 0
+ 129 0066 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 130 0068 9842     		cmp	r0, r3
+ 131 006a D8D1     		bne	.L4
+  39:Src/logic_main.c ****         }else{
+ 132              		.loc 1 39 0
+ 133 006c 4FF40051 		mov	r1, #8192
+ 134 0070 0648     		ldr	r0, .L7+20
+ 135 0072 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 136              	.LVL14:
+ 137 0076 D2E7     		b	.L4
+ 138              	.L8:
+ 139              		.align	2
+ 140              	.L7:
+ 141 0078 00000000 		.word	test_send_int
+ 142 007c 00000000 		.word	test_msg
+ 143 0080 00000000 		.word	huart2
+ 144 0084 00000000 		.word	readBuf
+ 145 0088 00000000 		.word	.LANCHOR0
+ 146 008c 00100140 		.word	1073811456
+ 147              		.cfi_endproc
+ 148              	.LFE66:
+ 150              		.global	test_receive_int
+ 151              		.comm	readBuf,1,4
+ 152              		.comm	test_send_int,1,1
+ 153              		.comm	test_msg,1,4
+ 154              		.section	.data.test_receive_int,"aw",%progbits
+ 155              		.set	.LANCHOR0,. + 0
+ 158              	test_receive_int:
+ 159 0000 09       		.byte	9
+ 160              		.text
+ 161              	.Letext0:
+ 162              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 163              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 164              		.file 4 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 165              		.file 5 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 166              		.file 6 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 167              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/stdlib.h"
+ 168              		.file 8 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 169              		.file 9 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/time.h"
+ARM GAS  /tmp/ccu8P1LS.s 			page 5
+
+
+ 170              		.file 10 "Drivers/CMSIS/Include/core_cm3.h"
+ 171              		.file 11 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 172              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 173              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 174              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 175              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 176              		.file 16 "Inc/usart.h"
+ 177              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 178              		.file 18 "Inc/gpio.h"
+ 179              		.file 19 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ARM GAS  /tmp/ccu8P1LS.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 logic_main.c
+     /tmp/ccu8P1LS.s:16     .text.get_random_integer:0000000000000000 $t
+     /tmp/ccu8P1LS.s:23     .text.get_random_integer:0000000000000000 get_random_integer
+     /tmp/ccu8P1LS.s:48     .text.main:0000000000000000 $t
+     /tmp/ccu8P1LS.s:55     .text.main:0000000000000000 main
+     /tmp/ccu8P1LS.s:141    .text.main:0000000000000078 $d
+                            *COM*:0000000000000001 test_send_int
+                            *COM*:0000000000000001 test_msg
+                            *COM*:0000000000000001 readBuf
+     /tmp/ccu8P1LS.s:158    .data.test_receive_int:0000000000000000 test_receive_int
+
+UNDEFINED SYMBOLS
+rand
+HAL_Init
+SystemClock_Config
+MX_GPIO_Init
+MX_USART2_UART_Init
+time
+srand
+HAL_Delay
+itoa
+HAL_UART_Transmit
+HAL_UART_Receive
+atoi
+HAL_GPIO_TogglePin
+huart2

@@ -1,0 +1,255 @@
+ARM GAS  /tmp/cco2reRS.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"logic_main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.main,"ax",%progbits
+  16              		.align	1
+  17              		.global	main
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	main:
+  24              	.LFB66:
+  25              		.file 1 "Src/logic_main.c"
+   1:Src/logic_main.c **** 
+   2:Src/logic_main.c **** #define LD2_Pin GPIO_PIN_13
+   3:Src/logic_main.c **** #define LD2_GPIO_Port GPIOC
+   4:Src/logic_main.c **** 
+   5:Src/logic_main.c **** #include "main.h"
+   6:Src/logic_main.c **** 
+   7:Src/logic_main.c **** #include <string.h>
+   8:Src/logic_main.c **** 
+   9:Src/logic_main.c **** // hal include
+  10:Src/logic_main.c **** #include "stm32f1xx_hal.h"
+  11:Src/logic_main.c **** #include "stm32f1xx_hal_tim.h"
+  12:Src/logic_main.c **** 
+  13:Src/logic_main.c **** // cubemx include
+  14:Src/logic_main.c **** #include "gpio.h"
+  15:Src/logic_main.c **** #include "usart.h"
+  16:Src/logic_main.c **** #include "dma.h"
+  17:Src/logic_main.c **** 
+  18:Src/logic_main.c **** 
+  19:Src/logic_main.c **** int main(void);
+  20:Src/logic_main.c **** 
+  21:Src/logic_main.c **** UART_HandleTypeDef huart2;
+  22:Src/logic_main.c **** DMA_HandleTypeDef hdma_usart2_tx;
+  23:Src/logic_main.c **** 
+  24:Src/logic_main.c **** 
+  25:Src/logic_main.c **** char msg[]="test message";
+  26:Src/logic_main.c **** 
+  27:Src/logic_main.c **** // init_stm32_main_template
+  28:Src/logic_main.c **** int main(void){
+  26              		.loc 1 28 0
+  27              		.cfi_startproc
+  28              		@ Volatile: function does not return.
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cco2reRS.s 			page 2
+
+
+  31 0000 80B5     		push	{r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 7, -8
+  35              		.cfi_offset 14, -4
+  29:Src/logic_main.c ****     HAL_Init();
+  36              		.loc 1 29 0
+  37 0002 FFF7FEFF 		bl	HAL_Init
+  38              	.LVL0:
+  30:Src/logic_main.c **** 
+  31:Src/logic_main.c ****     SystemClock_Config();
+  39              		.loc 1 31 0
+  40 0006 FFF7FEFF 		bl	SystemClock_Config
+  41              	.LVL1:
+  32:Src/logic_main.c **** 
+  33:Src/logic_main.c ****     MX_GPIO_Init();
+  42              		.loc 1 33 0
+  43 000a FFF7FEFF 		bl	MX_GPIO_Init
+  44              	.LVL2:
+  34:Src/logic_main.c ****     MX_DMA_Init();
+  45              		.loc 1 34 0
+  46 000e FFF7FEFF 		bl	MX_DMA_Init
+  47              	.LVL3:
+  35:Src/logic_main.c ****     MX_USART2_UART_Init();
+  48              		.loc 1 35 0
+  49 0012 FFF7FEFF 		bl	MX_USART2_UART_Init
+  50              	.LVL4:
+  36:Src/logic_main.c **** 
+  37:Src/logic_main.c **** 
+  38:Src/logic_main.c **** 
+  39:Src/logic_main.c ****     hdma_usart2_tx.Instance = DMA1_Channel7;
+  51              		.loc 1 39 0
+  52 0016 1B48     		ldr	r0, .L4
+  53 0018 1B4B     		ldr	r3, .L4+4
+  54 001a 0360     		str	r3, [r0]
+  40:Src/logic_main.c ****     hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+  55              		.loc 1 40 0
+  56 001c 1023     		movs	r3, #16
+  57 001e 4360     		str	r3, [r0, #4]
+  41:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+  58              		.loc 1 41 0
+  59 0020 0023     		movs	r3, #0
+  60 0022 8360     		str	r3, [r0, #8]
+  42:Src/logic_main.c ****     hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+  61              		.loc 1 42 0
+  62 0024 8022     		movs	r2, #128
+  63 0026 C260     		str	r2, [r0, #12]
+  43:Src/logic_main.c ****     hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  64              		.loc 1 43 0
+  65 0028 0361     		str	r3, [r0, #16]
+  44:Src/logic_main.c ****     hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+  66              		.loc 1 44 0
+  67 002a 4361     		str	r3, [r0, #20]
+  45:Src/logic_main.c ****     hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+  68              		.loc 1 45 0
+  69 002c 8361     		str	r3, [r0, #24]
+  46:Src/logic_main.c ****     hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+ARM GAS  /tmp/cco2reRS.s 			page 3
+
+
+  70              		.loc 1 46 0
+  71 002e C361     		str	r3, [r0, #28]
+  47:Src/logic_main.c ****     HAL_DMA_Init(&hdma_usart2_tx);
+  72              		.loc 1 47 0
+  73 0030 FFF7FEFF 		bl	HAL_DMA_Init
+  74              	.LVL5:
+  75              	.L2:
+  48:Src/logic_main.c **** 
+  49:Src/logic_main.c **** 
+  50:Src/logic_main.c **** 
+  51:Src/logic_main.c ****     while (1){
+  52:Src/logic_main.c ****         HAL_DMA_Start(&hdma_usart2_tx,  (uint32_t)msg,  (uint32_t)&huart2.Instance->DR, strlen(msg)
+  76              		.loc 1 52 0 discriminator 1
+  77 0034 154C     		ldr	r4, .L4+8
+  78 0036 2568     		ldr	r5, [r4]
+  79 0038 0435     		adds	r5, r5, #4
+  80 003a 154F     		ldr	r7, .L4+12
+  81 003c 3846     		mov	r0, r7
+  82 003e FFF7FEFF 		bl	strlen
+  83              	.LVL6:
+  84 0042 104E     		ldr	r6, .L4
+  85 0044 0346     		mov	r3, r0
+  86 0046 2A46     		mov	r2, r5
+  87 0048 3946     		mov	r1, r7
+  88 004a 3046     		mov	r0, r6
+  89 004c FFF7FEFF 		bl	HAL_DMA_Start
+  90              	.LVL7:
+  53:Src/logic_main.c ****         //Enable UART in DMA mode
+  54:Src/logic_main.c ****         huart2.Instance->CR3 |= USART_CR3_DMAT;
+  91              		.loc 1 54 0 discriminator 1
+  92 0050 2268     		ldr	r2, [r4]
+  93 0052 5369     		ldr	r3, [r2, #20]
+  94 0054 43F08003 		orr	r3, r3, #128
+  95 0058 5361     		str	r3, [r2, #20]
+  55:Src/logic_main.c ****         //Wait for transfer complete
+  56:Src/logic_main.c ****         HAL_DMA_PollForTransfer(&hdma_usart2_tx, HAL_DMA_FULL_TRANSFER, HAL_MAX_DELAY);
+  96              		.loc 1 56 0 discriminator 1
+  97 005a 4FF0FF32 		mov	r2, #-1
+  98 005e 0021     		movs	r1, #0
+  99 0060 3046     		mov	r0, r6
+ 100 0062 FFF7FEFF 		bl	HAL_DMA_PollForTransfer
+ 101              	.LVL8:
+  57:Src/logic_main.c ****         //Disable UART DMA mode
+  58:Src/logic_main.c ****         huart2.Instance->CR3 &= ~USART_CR3_DMAT;
+ 102              		.loc 1 58 0 discriminator 1
+ 103 0066 2268     		ldr	r2, [r4]
+ 104 0068 5369     		ldr	r3, [r2, #20]
+ 105 006a 23F08003 		bic	r3, r3, #128
+ 106 006e 5361     		str	r3, [r2, #20]
+  59:Src/logic_main.c ****         //Turn LD2 ON
+  60:Src/logic_main.c ****         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+ 107              		.loc 1 60 0 discriminator 1
+ 108 0070 4FF40051 		mov	r1, #8192
+ 109 0074 0748     		ldr	r0, .L4+16
+ 110 0076 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 111              	.LVL9:
+  61:Src/logic_main.c **** 
+ARM GAS  /tmp/cco2reRS.s 			page 4
+
+
+  62:Src/logic_main.c ****         HAL_Delay(500);
+ 112              		.loc 1 62 0 discriminator 1
+ 113 007a 4FF4FA70 		mov	r0, #500
+ 114 007e FFF7FEFF 		bl	HAL_Delay
+ 115              	.LVL10:
+ 116 0082 D7E7     		b	.L2
+ 117              	.L5:
+ 118              		.align	2
+ 119              	.L4:
+ 120 0084 00000000 		.word	hdma_usart2_tx
+ 121 0088 80000240 		.word	1073873024
+ 122 008c 00000000 		.word	huart2
+ 123 0090 00000000 		.word	.LANCHOR0
+ 124 0094 00100140 		.word	1073811456
+ 125              		.cfi_endproc
+ 126              	.LFE66:
+ 128              		.global	msg
+ 129              		.comm	hdma_usart2_tx,68,4
+ 130              		.comm	huart2,64,4
+ 131              		.section	.data.msg,"aw",%progbits
+ 132              		.align	2
+ 133              		.set	.LANCHOR0,. + 0
+ 136              	msg:
+ 137 0000 74657374 		.ascii	"test message\000"
+ 137      206D6573 
+ 137      73616765 
+ 137      00
+ 138              		.text
+ 139              	.Letext0:
+ 140              		.file 2 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/machine/_default_types.h"
+ 141              		.file 3 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/lock.h"
+ 142              		.file 4 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_types.h"
+ 143              		.file 5 "/home/logic/STM32Toolchain/gcc-arm/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h"
+ 144              		.file 6 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/reent.h"
+ 145              		.file 7 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/sys/_stdint.h"
+ 146              		.file 8 "Drivers/CMSIS/Include/core_cm3.h"
+ 147              		.file 9 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 148              		.file 10 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 149              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 150              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 151              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 152              		.file 14 "Inc/usart.h"
+ 153              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 154              		.file 16 "Inc/gpio.h"
+ 155              		.file 17 "Inc/dma.h"
+ 156              		.file 18 "/home/logic/STM32Toolchain/gcc-arm/arm-none-eabi/include/string.h"
+ 157              		.file 19 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ARM GAS  /tmp/cco2reRS.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 logic_main.c
+     /tmp/cco2reRS.s:16     .text.main:0000000000000000 $t
+     /tmp/cco2reRS.s:23     .text.main:0000000000000000 main
+     /tmp/cco2reRS.s:120    .text.main:0000000000000084 $d
+                            *COM*:0000000000000044 hdma_usart2_tx
+                            *COM*:0000000000000040 huart2
+     /tmp/cco2reRS.s:136    .data.msg:0000000000000000 msg
+     /tmp/cco2reRS.s:132    .data.msg:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_Init
+SystemClock_Config
+MX_GPIO_Init
+MX_DMA_Init
+MX_USART2_UART_Init
+HAL_DMA_Init
+strlen
+HAL_DMA_Start
+HAL_DMA_PollForTransfer
+HAL_GPIO_TogglePin
+HAL_Delay
