@@ -127,7 +127,7 @@ int main(void)
     HAL_Delay(1000);
 
 
-    if (compare_array_element(Buffer_Src, Buffer_Dest)){
+    if (memcmp(Buffer_Src, Buffer_Dest, sizeof(Buffer_Src))==0){
       HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
