@@ -69,6 +69,9 @@ void SystemClock_Config(void);
 uint8_t Buffer_Src[]={0,1,2,3,4,5,6,7,8,9};
 uint8_t Buffer_Dest[10];
 
+uint8_t * Src_addr = Buffer_Src;
+uint8_t * Dest_addr = Buffer_Dest;
+
 void XferCpltCallback ( DMA_HandleTypeDef * hdma );
 /* USER CODE END 0 */
 
@@ -120,10 +123,11 @@ int main(void)
   }
 
     hdma_memtomem_dma1_channel1.XferCpltCallback=&XferCpltCallback;
-    HAL_DMA_Start_IT(&hdma_memtomem_dma1_channel1,(uint32_t)Buffer_Src,(uint32_t)Buffer_Dest,10);
+    HAL_DMA_Start_IT(&hdma_memtomem_dma1_channel1,(uint32_t)Src_addr,(uint32_t)Dest_addr,10);
     HAL_Delay(1000);
 
-    if (memcmp(Buffer_Src, Buffer_Dest, sizeof(Buffer_Dest))){
+
+    if (compare_array_element(Buffer_Src, Buffer_Dest)){
       HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
@@ -131,6 +135,36 @@ int main(void)
   /* USER CODE END 3 */
 
 }
+
+int compare_array_element(uint8_t* array_1, uint8_t* array_2){
+  // 1 element is the same
+  // 0 element is not the same
+
+  int test_result = 1;
+  int length_of_array_1 = length_of_array(array_1);
+  int length_of_array_2 = length_of_array(array_2);
+
+  if (length_of_array_1==length_of_array_2){
+    for (int i =0; i <= length_of_array_1; i+=1){
+      if (array_1[i]==array_2[i]){
+        // array content is the same, skipping
+      }else{
+        // array content is not the same
+        return 0;
+      }
+    }
+
+  }else{
+    // array size is not the same
+    return 0;
+  }
+  return test_result;
+}
+
+int length_of_array(uint8_t* test_array){
+  return sizeof(test_array)/sizeof(test_array[0]);
+}
+
 
 void DMA1_Channel1_IRQHandler(void){
   HAL_DMA_IRQHandler(&hdma_memtomem_dma1_channel1);
@@ -140,7 +174,6 @@ void DMA1_Channel1_IRQHandler(void){
 void XferCpltCallback ( DMA_HandleTypeDef * hdma )
 {
     __NOP(); //we reach this only if DMA transfer was correct
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 
 /**
