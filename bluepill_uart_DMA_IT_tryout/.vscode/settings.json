@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "dockerfile.*": "dockerfile",
+        "docker-compose.*": "dockerfile",
+        ".gitattributes": "gitignore",
+        "*.tcc": "c"
+    }
+}
