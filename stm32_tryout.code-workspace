@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/logic/_workspace/stm32/mastering_stm32/example/nucleo-f103RB"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"dockerfile.*": "dockerfile",
+			"docker-compose.*": "dockerfile",
+			".gitattributes": "gitignore",
+			"dma.h": "c",
+			"stm32f1xx_hal.h": "c"
+		}
+	}
+}
