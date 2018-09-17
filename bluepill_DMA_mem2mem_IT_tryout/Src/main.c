@@ -37,10 +37,14 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+
+#include <string.h>
+
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include "dma.h"
 #include "gpio.h"
+
 
 /* USER CODE BEGIN Includes */
 
@@ -111,9 +115,17 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+  for (int i =0; i< sizeof(Buffer_Dest); i +=1){
+    Buffer_Dest[i] = 0;
+  }
+
     hdma_memtomem_dma1_channel1.XferCpltCallback=&XferCpltCallback;
     HAL_DMA_Start_IT(&hdma_memtomem_dma1_channel1,(uint32_t)Buffer_Src,(uint32_t)Buffer_Dest,10);
     HAL_Delay(1000);
+
+    if (memcmp(Buffer_Src, Buffer_Dest, sizeof(Buffer_Dest))){
+      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+    }
 
   }
   /* USER CODE END 3 */
