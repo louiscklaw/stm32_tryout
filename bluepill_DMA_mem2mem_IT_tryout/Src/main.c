@@ -112,26 +112,28 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+    while (1)
+    {
 
-  /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-  /* USER CODE BEGIN 3 */
-  for (int i =0; i< sizeof(Buffer_Dest); i +=1){
-    Buffer_Dest[i] = 0;
-  }
+    /* USER CODE BEGIN 3 */
+        //clear destination buffer
+        for (int i =0; i< sizeof(Buffer_Dest); i +=1){
+            Buffer_Dest[i] = 0;
+        }
 
-    hdma_memtomem_dma1_channel1.XferCpltCallback=&XferCpltCallback;
-    HAL_DMA_Start_IT(&hdma_memtomem_dma1_channel1,(uint32_t)Src_addr,(uint32_t)Dest_addr,10);
-    HAL_Delay(1000);
+        // i would like to stand clear from dma.c
+        hdma_memtomem_dma1_channel1.XferCpltCallback=&XferCpltCallback;
+        HAL_DMA_Start_IT(&hdma_memtomem_dma1_channel1,(uint32_t)Src_addr,(uint32_t)Dest_addr,10);
+        HAL_Delay(1000);
 
 
-    if (memcmp(Buffer_Src, Buffer_Dest, sizeof(Buffer_Src))==0){
-      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        if (memcmp(Buffer_Src, Buffer_Dest, sizeof(Buffer_Src))==0){
+            HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        }
+
     }
-
-  }
   /* USER CODE END 3 */
 
 }
