@@ -67,6 +67,12 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN 0 */
 
+// TODO: try this
+// void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+// {
+//     HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1);
+// }
+
 /* USER CODE END 0 */
 
 /**
