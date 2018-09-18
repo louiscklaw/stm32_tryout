@@ -44,9 +44,10 @@
 #include "dma.h"
 #include "tim.h"
 #include "gpio.h"
+#include "ws2812_lib.c"
 
 /* USER CODE BEGIN Includes */
-#define RET_SIGNAL_LENGTH 62
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -77,6 +78,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -101,61 +103,21 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-    uint16_t BIT0 = 30;
-    uint16_t BIT1 = 60;
+    int cpy_offset = 0;
+        cpy_offset = 0;
+        uint16_t r_test_pattern[test_pattern_total_length];
+        memcpy(r_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
+
+        cpy_offset +=RET_PATTERN_LENGTH;
+        memcpy(r_test_pattern+cpy_offset, r_testbit, sizeof(r_testbit));
 
 
-    uint16_t black_testbit[24]={
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        };
+    cpy_offset = 0;
+    uint16_t g_test_pattern[test_pattern_total_length];
+        memcpy(g_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
 
-    uint16_t white_testbit[24]={
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        };
-
-    uint16_t r_testbit[24]={
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        };
-
-    uint16_t g_testbit[24]={
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        };
-
-
-    uint16_t b_testbit[24]={
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-        BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-        };
-
-
-
-    // uint16_t test_pattern[6]={
-    //     BIT1,BIT0,BIT1,BIT1,BIT0,BIT0
-    // };
-
-    // uint16_t test_0_pattern[]={BIT0};
-    // uint16_t test_1_pattern[]={BIT1};
-
-    uint16_t test_0_50_us[RET_SIGNAL_LENGTH] = {0};
-
-    // uint16_t test_RET_pattern[42]={0};
-    // test_RET_pattern[41] = BIT1;
-
-
-    int test_pattern_total_length = RET_SIGNAL_LENGTH+24;
-
-    uint16_t test_pattern[test_pattern_total_length];
-    memcpy(test_pattern, test_0_50_us, sizeof(test_0_50_us));
-    memcpy(test_pattern+RET_SIGNAL_LENGTH, black_testbit, sizeof(white_testbit));
+        cpy_offset +=RET_PATTERN_LENGTH;
+        memcpy(g_test_pattern+cpy_offset, g_testbit, sizeof(g_testbit));
 
 
 
@@ -163,7 +125,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    HAL_Delay(1000);
+    HAL_Delay(3000);
+
+    int i=0;
 
   while (1)
   {
@@ -171,12 +135,21 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)test_0_50_us, RET_SIGNAL_LENGTH);
+    // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)RET_PATTERN, RET_SIGNAL_LENGTH);
 
-    HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)test_pattern, test_pattern_total_length);
+    if (i==0){
+        i=1;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)r_test_pattern, test_pattern_total_length);
 
-    HAL_Delay(500);
-    HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13, GPIO_PIN_SET);
+    }else{
+        i=0;
+        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)g_test_pattern, test_pattern_total_length);
+
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13, GPIO_PIN_RESET);
+    }
+    HAL_Delay(1000);
+    HAL_TIM_PWM_Stop_DMA(&htim3,TIM_CHANNEL_1);
   }
   /* USER CODE END 3 */
 

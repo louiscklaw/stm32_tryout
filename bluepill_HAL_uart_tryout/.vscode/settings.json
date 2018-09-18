@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "dockerfile.*": "dockerfile",
+        "docker-compose.*": "dockerfile",
+        ".gitattributes": "gitignore",
+        "array": "c",
+        "string_view": "c",
+        "stm32f1xx_hal.h": "c",
+        "list": "cpp"
+    }
+}

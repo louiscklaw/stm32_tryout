@@ -43,7 +43,7 @@
 extern DMA_HandleTypeDef hdma_usart2_tx;
 
 /******************************************************************************/
-/*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M3 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**
@@ -210,3 +210,9 @@ void DMA1_Channel7_IRQHandler(void)
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+void try_send_uart(void){
+    HAL_DMA_Start_IT(&hdma_usart2_tx,  (uint32_t)msg,  (uint32_t)&huart2.Instance->DR, strlen(msg));
+    huart2.Instance->CR3 |= USART_CR3_DMAT;
+
+}
