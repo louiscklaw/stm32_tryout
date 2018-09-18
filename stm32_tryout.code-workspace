@@ -13,7 +13,12 @@
 			"docker-compose.*": "dockerfile",
 			".gitattributes": "gitignore",
 			"dma.h": "c",
-			"stm32f1xx_hal.h": "c"
+			"stm32f1xx_hal.h": "c",
+			"list": "c",
+			"usart.h": "c",
+			"array": "c",
+			"vector": "c",
+			"string_view": "c"
 		}
 	}
 }
