@@ -6,7 +6,7 @@
 #define TOTAL_LED_NUM 1
 
 // length of reset(RET) pattern
-#define RET_PATTERN_LENGTH 62
+#define RET_PATTERN_LENGTH 80
 
 
 // 30 and 60 depends on the main clock

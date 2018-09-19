@@ -54,7 +54,6 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,11 +66,21 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN 0 */
 
-// TODO: try this
-// void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
-// {
-//     HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1);
-// }
+void led_turn_color(int color, uint16_t * pattern_addr){
+  int cpy_offset = 0;
+
+  memcpy(pattern_addr, RET_PATTERN, sizeof(RET_PATTERN));
+  cpy_offset +=RET_PATTERN_LENGTH;
+
+  if (color==1){
+    memcpy(pattern_addr+cpy_offset, r_testbit, sizeof(r_testbit));
+  }else if(color==2){
+    memcpy(pattern_addr+cpy_offset, g_testbit, sizeof(g_testbit));
+  }else if(color ==3){
+    memcpy(pattern_addr+cpy_offset, b_testbit, sizeof(b_testbit));
+  }
+
+}
 
 /* USER CODE END 0 */
 
@@ -83,7 +92,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint16_t final_test_pattern[test_pattern_total_length];
 
   /* USER CODE END 1 */
 
@@ -109,31 +118,21 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-    int cpy_offset = 0;
-        cpy_offset = 0;
-        uint16_t r_test_pattern[test_pattern_total_length];
-        memcpy(r_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
-
-        cpy_offset +=RET_PATTERN_LENGTH;
-        memcpy(r_test_pattern+cpy_offset, r_testbit, sizeof(r_testbit));
-
-
-    cpy_offset = 0;
-    uint16_t g_test_pattern[test_pattern_total_length];
-        memcpy(g_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
-
-        cpy_offset +=RET_PATTERN_LENGTH;
-        memcpy(g_test_pattern+cpy_offset, g_testbit, sizeof(g_testbit));
-
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    HAL_Delay(3000);
+  int cpy_offset = 0;
+  cpy_offset = 0;
+  uint16_t r_test_pattern[test_pattern_total_length];
+  memcpy(final_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
 
-    int i=0;
+  cpy_offset +=RET_PATTERN_LENGTH;
+  memcpy(final_test_pattern+cpy_offset, r_testbit, sizeof(r_testbit));
+
+  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)final_test_pattern, test_pattern_total_length);
+
+  HAL_Delay(3000);
 
   while (1)
   {
@@ -141,21 +140,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)RET_PATTERN, RET_SIGNAL_LENGTH);
-
-    if (i==0){
-        i=1;
-        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)r_test_pattern, test_pattern_total_length);
-
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13, GPIO_PIN_SET);
-    }else{
-        i=0;
-        HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)g_test_pattern, test_pattern_total_length);
-
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13, GPIO_PIN_RESET);
+    for(int i=1;i<=3;i+=1){
+      HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
+      led_turn_color(i, final_test_pattern);
+      HAL_Delay(3000);
     }
-    HAL_Delay(1000);
-    HAL_TIM_PWM_Stop_DMA(&htim3,TIM_CHANNEL_1);
   }
   /* USER CODE END 3 */
 
