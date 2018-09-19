@@ -68,16 +68,24 @@ void SystemClock_Config(void);
 
 void led_turn_color(int color, uint16_t * pattern_addr){
   int cpy_offset = 0;
+  int size_of_color_bit = sizeof(r_testbit);
 
   memcpy(pattern_addr, RET_PATTERN, sizeof(RET_PATTERN));
   cpy_offset +=RET_PATTERN_LENGTH;
 
   if (color==1){
-    memcpy(pattern_addr+cpy_offset, r_testbit, sizeof(r_testbit));
+
+    memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
+    // cpy_offset+=size_of_color_bit;
+    // memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
   }else if(color==2){
-    memcpy(pattern_addr+cpy_offset, g_testbit, sizeof(g_testbit));
+    memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
+    // cpy_offset+=size_of_color_bit;
+    // memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
   }else if(color ==3){
-    memcpy(pattern_addr+cpy_offset, b_testbit, sizeof(b_testbit));
+    memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
+    // cpy_offset+=size_of_color_bit;
+    // memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
   }
 
 }
@@ -122,13 +130,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int cpy_offset = 0;
-  cpy_offset = 0;
-  uint16_t r_test_pattern[test_pattern_total_length];
-  memcpy(final_test_pattern, RET_PATTERN, sizeof(RET_PATTERN));
-
-  cpy_offset +=RET_PATTERN_LENGTH;
-  memcpy(final_test_pattern+cpy_offset, r_testbit, sizeof(r_testbit));
 
   HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)final_test_pattern, test_pattern_total_length);
 
