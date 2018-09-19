@@ -132,7 +132,7 @@ int main(void)
 
   HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)final_test_pattern, test_pattern_total_length);
 
-  HAL_Delay(3000);
+  HAL_Delay(1000);
 
   while (1)
   {
@@ -143,7 +143,7 @@ int main(void)
     for(int i=1;i<=3;i+=1){
       HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
       led_turn_color(i, final_test_pattern);
-      HAL_Delay(3000);
+      HAL_Delay(COLOR_CHANGE_TIME_MS);
     }
   }
   /* USER CODE END 3 */

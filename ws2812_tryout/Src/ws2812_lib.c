@@ -15,6 +15,8 @@
 #define BIT0 30
 #define BIT1 60
 
+#define COLOR_CHANGE_TIME_MS 50
+
 int helloworld = 0;
 
 uint16_t RET_PATTERN[RET_PATTERN_LENGTH] = {0};
