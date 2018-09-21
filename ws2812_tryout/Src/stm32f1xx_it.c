@@ -36,6 +36,24 @@
 #include "stm32f1xx_it.h"
 
 /* USER CODE BEGIN 0 */
+extern int led_length;
+
+extern uint16_t *p_sending_pattern;
+extern int  *p_sending_pattern_length;
+
+extern uint16_t *black_testbit;
+extern uint16_t *white_testbit;
+extern uint16_t *r_testbit;
+
+extern uint16_t *RET_PATTERN;
+
+extern int * p_wait_length_24;
+extern int * p_wait_length_40;
+
+// what do the DMA data currently sending?
+// 0 = RET pattern
+// 1 = LED pattern
+int current_sending=0;
 
 /* USER CODE END 0 */
 
@@ -198,6 +216,21 @@ void SysTick_Handler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
+  // if (current_sending==0){
+
+  //   p_sending_pattern_length = *p_wait_length_24;
+  //   p_sending_pattern = r_testbit;
+  //   current_sending=1;
+  // }else{
+  //   p_sending_pattern_length = *p_wait_length_40;
+  //   p_sending_pattern = RET_PATTERN;
+
+  //   current_sending=0;
+  // }
+
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
+  __NOP;
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
 
   /* USER CODE END DMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);

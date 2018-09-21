@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "dockerfile.*": "dockerfile",
+        "docker-compose.*": "dockerfile",
+        ".gitattributes": "gitignore",
+        "gpio.h": "c",
+        "ws2812_lib.h": "c",
+        "typeinfo": "cpp",
+        "string.h": "c",
+        "stm32f1xx.h": "c",
+        "stm32f1xx_it.h": "c",
+        "stm32f1xx_hal.h": "c",
+        "logic_const.h": "c"
+    }
+}

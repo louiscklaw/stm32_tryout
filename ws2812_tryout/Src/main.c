@@ -37,16 +37,15 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include <string.h>
-
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include "dma.h"
 #include "tim.h"
 #include "gpio.h"
-#include "ws2812_lib.c"
 
 /* USER CODE BEGIN Includes */
+#include "logic_const.h"
+#include "ws2812_lib.h"
 
 /* USER CODE END Includes */
 
@@ -54,6 +53,20 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+
+uint16_t sending_pattern[40]={BIT0};
+uint16_t *p_sending_pattern = sending_pattern;
+
+int sending_pattern_length=40;
+int *p_sending_pattern_length=&sending_pattern_length;
+
+int wait_length_24 = 24;
+int *p_wait_length_24 = &wait_length_24;
+
+int wait_length_40 = 40;
+int *p_wait_length_40 = &wait_length_40;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,29 +79,29 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN 0 */
 
-void led_turn_color(int color, uint16_t * pattern_addr){
-  int cpy_offset = 0;
-  int size_of_color_bit = sizeof(r_testbit);
+// void led_turn_color(int color, uint16_t * pattern_addr){
+//   int cpy_offset = 0;
+//   int size_of_color_bit = sizeof(r_testbit);
 
-  memcpy(pattern_addr, RET_PATTERN, sizeof(RET_PATTERN));
-  cpy_offset +=RET_PATTERN_LENGTH;
+//   memcpy(pattern_addr, RET_PATTERN, sizeof(RET_PATTERN));
+//   cpy_offset +=RET_PATTERN_LENGTH;
 
-  if (color==1){
+//   if (color==1){
 
-    memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
-    // cpy_offset+=size_of_color_bit;
-    // memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
-  }else if(color==2){
-    memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
-    // cpy_offset+=size_of_color_bit;
-    // memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
-  }else if(color ==3){
-    memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
-    // cpy_offset+=size_of_color_bit;
-    // memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
-  }
+//     memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
+//     // cpy_offset+=size_of_color_bit;
+//     // memcpy(pattern_addr+cpy_offset, r_testbit, size_of_color_bit);
+//   }else if(color==2){
+//     memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
+//     // cpy_offset+=size_of_color_bit;
+//     // memcpy(pattern_addr+cpy_offset, g_testbit, size_of_color_bit);
+//   }else if(color ==3){
+//     memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
+//     // cpy_offset+=size_of_color_bit;
+//     // memcpy(pattern_addr+cpy_offset, b_testbit, size_of_color_bit);
+//   }
 
-}
+// }
 
 /* USER CODE END 0 */
 
@@ -100,7 +113,7 @@ void led_turn_color(int color, uint16_t * pattern_addr){
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  uint16_t final_test_pattern[test_pattern_total_length];
+
 
   /* USER CODE END 1 */
 
@@ -131,21 +144,20 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)final_test_pattern, test_pattern_total_length);
+  p_sending_pattern = RET_pattern;
+  // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)p_sending_pattern, 40);
+  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)r_testbit, 24);
+
 
   HAL_Delay(1000);
 
   while (1)
   {
-
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    for(int i=1;i<=3;i+=1){
-      HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
-      led_turn_color(i, final_test_pattern);
-      HAL_Delay(COLOR_CHANGE_TIME_MS);
-    }
+    HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
+    HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 
