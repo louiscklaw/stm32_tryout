@@ -8,7 +8,7 @@
 
 
 
-#define RET_PATTERN_LENGTH 80
+#define RET_PATTERN_LENGTH 48
 
 #define BIT0 30
 #define BIT1 60
@@ -26,7 +26,7 @@ uint16_t black_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
     };
 
-int r_led_testbit_len = 24;
+int one_testbit_len = 24;
 uint16_t r_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,

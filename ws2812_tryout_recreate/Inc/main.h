@@ -51,8 +51,6 @@
 
 #define LD_Pin GPIO_PIN_13
 #define LD_GPIO_Port GPIOC
-#define EXTI_LD_Pin GPIO_PIN_14
-#define EXTI_LD_GPIO_Port GPIOC
 
 /* ########################## Assert Selection ############################## */
 /**
