@@ -46,7 +46,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
 #include <string.h>
-
+#include "ws2812.h"
 
 
 /* USER CODE END Includes */
@@ -123,7 +123,8 @@ uint16_t rgb_pwm_value_array[3][NUM_OF_WS2812]={0};
 
 int len_led_rgb_values = NUM_OF_WS2812*3;
 uint8_t led_rgb_values[NUM_OF_WS2812*3]={0};
-uint8_t led_rgb_value;
+
+extern uint8_t led_rgb_value;
 
 /* USER CODE END PV */
 
