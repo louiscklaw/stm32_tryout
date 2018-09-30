@@ -100,11 +100,12 @@ uint16_t white_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
     };
 
-uint16_t g_testbit[]={
+uint16_t g_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
     };
+uint16_t g_led_testbit_length=24;
 
 uint16_t b_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
@@ -163,22 +164,13 @@ int main(void)
 
   led_test_array = malloc(length_test_array * sizeof(uint16_t));
 
-  starting_address=led_test_array;
+
 
   // memcpy(starting_address , RET_TESTBIT_FIRST_HALF, RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
   // starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
 
-  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
 
-  memcpy(starting_address, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
-  starting_address +=r_led_testbit_length;
-
-  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
-
-
-
+  update_led_mem();
 
 
 
@@ -250,7 +242,31 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void update_led_mem(void){
+  starting_address=led_test_array;
+  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
 
+  memcpy(starting_address, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
+  starting_address +=r_led_testbit_length;
+
+  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
+
+}
+
+void update_led_g_mem(void){
+  starting_address=led_test_array;
+  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
+
+  memcpy(starting_address, g_led_testbit, g_led_testbit_length * sizeof(uint16_t));
+  starting_address +=g_led_testbit_length;
+
+  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
+
+}
 /* USER CODE END 4 */
 
 /**

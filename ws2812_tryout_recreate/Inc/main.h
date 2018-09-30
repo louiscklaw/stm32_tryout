@@ -72,6 +72,9 @@
 
 #define ONE_TESTBIT_LENGTH 24
 
+void update_led_mem(void);
+void update_led_g_mem(void);
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

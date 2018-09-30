@@ -54,10 +54,10 @@ void tick_gpio_pin(DMA_HandleTypeDef *hdma){
 
   if (bit_counter > 1){
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-    // memcpy(led_test_array, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
+    update_led_g_mem();
   }else{
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
-    // memcpy(led_test_array, b_led_testbit, one_testbit_len * sizeof(uint16_t));
+    update_led_mem();
   }
 
   if (bit_counter > 1){
