@@ -41,28 +41,34 @@
 extern uint16_t r_led_testbit[];
 extern uint16_t* led_test_array;
 extern int one_testbit_len;
+extern uint8_t color_control;
 
 int bit_counter=0;
 
 void tick_gpio_pin(DMA_HandleTypeDef *hdma);
 
 void tick_gpio_pin(DMA_HandleTypeDef *hdma){
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-
   bit_counter+=1;
 
   if (bit_counter > 1){
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-    update_led_g_mem();
   }else{
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
-    update_led_mem();
+
   }
 
   if (bit_counter > 1){
     bit_counter=0;
   }
+
+  if (color_control == 0){
+    update_led_g_mem();
+  }else{
+    update_led_mem();
+  }
+
+
+
 }
 
 /* USER CODE END 0 */

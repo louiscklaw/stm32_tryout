@@ -58,9 +58,8 @@
 
 // define the number of the led
 int led_length=4;
-int one_testbit_len = ONE_TESTBIT_LENGTH;
 
-int length_test_array = ONE_TESTBIT_LENGTH + RET_PATTERN_LENGTH_FIRST_HALF + RET_PATTERN_LENGTH_SECOND_HALF;
+uint16_t mem_area_rgb_led[LEN_MEM_AREA_FOR_RGB_LED] = {0};
 
 // length of reset(RET) pattern
 
@@ -113,6 +112,8 @@ uint16_t b_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
     };
 
+uint8_t color_control=0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -162,7 +163,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  led_test_array = malloc(length_test_array * sizeof(uint16_t));
+  // led_test_array = malloc(length_test_array * sizeof(uint16_t));
 
 
 
@@ -174,7 +175,7 @@ int main(void)
 
 
 
-  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)led_test_array, length_test_array);
+  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)mem_area_rgb_led, LEN_MEM_AREA_FOR_RGB_LED);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -185,6 +186,13 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
+    if (color_control==0){
+      color_control=1;
+    }else{
+      color_control=0;
+    }
+    HAL_Delay(1000);
 
   }
   /* USER CODE END 3 */
@@ -243,9 +251,12 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void update_led_mem(void){
-  starting_address=led_test_array;
+  starting_address=mem_area_rgb_led;
   memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
   starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
+
+  memcpy(starting_address, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
+  starting_address +=r_led_testbit_length;
 
   memcpy(starting_address, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
   starting_address +=r_led_testbit_length;
@@ -256,9 +267,12 @@ void update_led_mem(void){
 }
 
 void update_led_g_mem(void){
-  starting_address=led_test_array;
+  starting_address=mem_area_rgb_led;
   memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
   starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
+
+  memcpy(starting_address, g_led_testbit, g_led_testbit_length * sizeof(uint16_t));
+  starting_address +=g_led_testbit_length;
 
   memcpy(starting_address, g_led_testbit, g_led_testbit_length * sizeof(uint16_t));
   starting_address +=g_led_testbit_length;
