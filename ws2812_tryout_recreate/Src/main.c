@@ -76,6 +76,7 @@ uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
 // uint16_t ONE_BIT_RET_PATTERN[one_testbit_len]={0};
 
 uint16_t* led_test_array;
+uint16_t* starting_address;
 
 // RUN CONFIGURATION
 int test_pattern_total_length;
@@ -162,7 +163,7 @@ int main(void)
 
   led_test_array = malloc(length_test_array * sizeof(uint16_t));
 
-  uint16_t* starting_address=led_test_array;
+  starting_address=led_test_array;
 
   // memcpy(starting_address , RET_TESTBIT_FIRST_HALF, RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
   // starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
