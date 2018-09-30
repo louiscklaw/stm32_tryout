@@ -44,6 +44,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -57,9 +58,9 @@
 
 // define the number of the led
 int led_length=4;
-int one_testbit_len = 24;
+int one_testbit_len = ONE_TESTBIT_LENGTH;
 
-int length_test_array = 24 + RET_PATTERN_LENGTH;
+int length_test_array = ONE_TESTBIT_LENGTH + RET_PATTERN_LENGTH_FIRST_HALF + RET_PATTERN_LENGTH_SECOND_HALF;
 
 // length of reset(RET) pattern
 
@@ -68,6 +69,9 @@ uint16_t test_four_zero[]={BIT0, BIT0, BIT0, BIT0};
 uint16_t test_four_one[]={BIT1, BIT1, BIT1, BIT1};
 
 uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
+uint16_t RET_TESTBIT_FIRST_HALF[RET_PATTERN_LENGTH_FIRST_HALF]={0};
+uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
+
 
 // uint16_t ONE_BIT_RET_PATTERN[one_testbit_len]={0};
 
@@ -81,6 +85,7 @@ uint16_t r_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
     };
+uint16_t r_led_testbit_length=24;
 
 uint16_t black_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
@@ -155,10 +160,25 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-
   led_test_array = malloc(length_test_array * sizeof(uint16_t));
-  memcpy(led_test_array, r_led_testbit, one_testbit_len * sizeof(uint16_t));
-  memcpy(led_test_array + one_testbit_len, RET_PATTERN, RET_PATTERN_LENGTH * sizeof(uint16_t));
+
+  uint16_t* starting_address=led_test_array;
+
+  // memcpy(starting_address , RET_TESTBIT_FIRST_HALF, RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
+  // starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
+
+  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
+
+  memcpy(starting_address, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
+  starting_address +=r_led_testbit_length;
+
+  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
+  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
+
+
+
+
 
 
   HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)led_test_array, length_test_array);

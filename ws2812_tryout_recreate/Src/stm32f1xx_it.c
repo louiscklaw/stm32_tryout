@@ -48,13 +48,13 @@ void tick_gpio_pin(DMA_HandleTypeDef *hdma);
 
 void tick_gpio_pin(DMA_HandleTypeDef *hdma){
 
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
 
   bit_counter+=1;
 
   if (bit_counter > 1){
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-    memcpy(led_test_array, r_led_testbit, one_testbit_len * sizeof(uint16_t));
+    // memcpy(led_test_array, r_led_testbit, r_led_testbit_length * sizeof(uint16_t));
   }else{
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
     // memcpy(led_test_array, b_led_testbit, one_testbit_len * sizeof(uint16_t));
@@ -227,7 +227,7 @@ void SysTick_Handler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
-
+  hdma_tim3_ch1_trig.XferCpltCallback=&tick_gpio_pin;
   /* USER CODE END DMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
   /* USER CODE BEGIN DMA1_Channel6_IRQn 1 */
