@@ -44,7 +44,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 /* USER CODE BEGIN Includes */
-
+#include <stdint.h>
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
@@ -68,7 +69,8 @@
 #define RET_PATTERN_LENGTH_FIRST_HALF 24
 #define RET_PATTERN_LENGTH_SECOND_HALF 24
 
-#define NUM_OF_WS2812 2
+// 0,1,2
+#define NUM_OF_WS2812 8
 #define ONE_TESTBIT_LENGTH 24
 #define RGB_LED_BIT_LENGTH NUM_OF_WS2812 * ONE_TESTBIT_LENGTH
 
@@ -80,6 +82,15 @@
 
 void update_led_mem(void);
 void update_led_g_mem(void);
+
+void convert_channel_to_binary(uint8_t color_value, uint16_t* output_array);
+void convert_LED_to_binary(uint8_t RGB_value, uint16_t* binary_value);
+
+void define_color_1();
+void define_color_2();
+void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array);
+void rotate_rgb_one_led();
+void ping_pong_one_led();
 
 /* USER CODE END Private defines */
 

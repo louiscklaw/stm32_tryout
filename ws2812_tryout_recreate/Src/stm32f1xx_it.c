@@ -60,12 +60,7 @@ void tick_gpio_pin(DMA_HandleTypeDef *hdma){
   if (bit_counter > 1){
     bit_counter=0;
   }
-
-  if (color_control == 0){
-    update_led_g_mem();
-  }else{
-    update_led_mem();
-  }
+  update_led_mem();
 
 
 
