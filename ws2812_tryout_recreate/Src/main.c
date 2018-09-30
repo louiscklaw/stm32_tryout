@@ -6,7 +6,7 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
@@ -44,7 +44,8 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-#include "ws2812_lib.h"
+#include <string.h>
+
 
 /* USER CODE END Includes */
 
@@ -53,6 +54,58 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
+
+// define the number of the led
+int led_length=4;
+int one_testbit_len = 24;
+
+int length_test_array = 24 + RET_PATTERN_LENGTH;
+
+// length of reset(RET) pattern
+
+uint16_t test_zero_test_one[]={BIT0, BIT1, BIT0, BIT1};
+uint16_t test_four_zero[]={BIT0, BIT0, BIT0, BIT0};
+uint16_t test_four_one[]={BIT1, BIT1, BIT1, BIT1};
+
+uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
+
+// uint16_t ONE_BIT_RET_PATTERN[one_testbit_len]={0};
+
+uint16_t* led_test_array;
+
+// RUN CONFIGURATION
+int test_pattern_total_length;
+
+uint16_t r_led_testbit[]={
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    };
+
+uint16_t black_testbit[]={
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    };
+
+uint16_t white_testbit[]={
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    };
+
+uint16_t g_testbit[]={
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    };
+
+uint16_t b_led_testbit[]={
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
+    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
+    };
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,6 +113,8 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
+
+void blink_ready(int num_to_blink);
 
 /* USER CODE END PFP */
 
@@ -101,20 +156,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-
-  HAL_Delay(100);
-  blink_ready(3);
-
-  int length_test_array = one_testbit_len + RET_PATTERN_LENGTH;
-  uint16_t* led_test_array = malloc(length_test_array * sizeof(uint16_t));
-
+  led_test_array = malloc(length_test_array * sizeof(uint16_t));
   memcpy(led_test_array, r_led_testbit, one_testbit_len * sizeof(uint16_t));
   memcpy(led_test_array + one_testbit_len, RET_PATTERN, RET_PATTERN_LENGTH * sizeof(uint16_t));
 
-  // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)r_testbit, wait_length);
-  // HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)RET_PATTERN, RET_PATTERN_LENGTH);
-  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)led_test_array, length_test_array);
 
+  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)led_test_array, length_test_array);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -141,7 +188,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -155,7 +202,7 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -169,11 +216,11 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time 
+    /**Configure the Systick interrupt time
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-    /**Configure the Systick 
+    /**Configure the Systick
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -182,23 +229,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-  void blink_ready(int num_to_blink){
-    int LED_ON_DELAY=500;
-    int LED_OFF_DELAY=500;
-    for(int i =0; i< num_to_blink; i+=1){
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-      HAL_Delay(LED_OFF_DELAY);
-
-      // turn led on
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-      HAL_Delay(LED_ON_DELAY);
-
-      // turn led off
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-
-    }
-  }
 
 /* USER CODE END 4 */
 
@@ -227,7 +257,7 @@ void _Error_Handler(char *file, int line)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

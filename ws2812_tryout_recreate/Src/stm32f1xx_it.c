@@ -36,11 +36,40 @@
 #include "stm32f1xx_it.h"
 
 /* USER CODE BEGIN 0 */
+#include <string.h>
+
+extern uint16_t r_led_testbit[];
+extern uint16_t* led_test_array;
+extern int one_testbit_len;
+
 int bit_counter=0;
+
+void tick_gpio_pin(DMA_HandleTypeDef *hdma);
+
+void tick_gpio_pin(DMA_HandleTypeDef *hdma){
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+
+  bit_counter+=1;
+
+  if (bit_counter > 1){
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
+    memcpy(led_test_array, r_led_testbit, one_testbit_len * sizeof(uint16_t));
+  }else{
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+    // memcpy(led_test_array, b_led_testbit, one_testbit_len * sizeof(uint16_t));
+  }
+
+  if (bit_counter > 1){
+    bit_counter=0;
+  }
+}
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_tim3_ch1_trig;
+extern TIM_HandleTypeDef htim3;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */
@@ -203,20 +232,21 @@ void DMA1_Channel6_IRQHandler(void)
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
   /* USER CODE BEGIN DMA1_Channel6_IRQn 1 */
 
-  bit_counter+=1;
-
-  if (bit_counter > 1){
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-
-  }else{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
-  }
-
-  if (bit_counter > 1){
-    bit_counter=0;
-  }
-
   /* USER CODE END DMA1_Channel6_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM3 global interrupt.
+*/
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+
+  /* USER CODE END TIM3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
