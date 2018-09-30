@@ -62,21 +62,8 @@
 
 /* USER CODE BEGIN Private defines */
 
-#define RET_PATTERN_LENGTH 48
-#define RET_PATTERN_LENGTH_FIRST_HALF 24
-#define RET_PATTERN_LENGTH_SECOND_HALF 24
-
-// 0,1,2
-#define NUM_OF_WS2812 8
-#define ONE_TESTBIT_LENGTH 24
-#define RGB_LED_BIT_LENGTH NUM_OF_WS2812 * ONE_TESTBIT_LENGTH
-
-// mem reserved for update rgbled
-#define LEN_MEM_AREA_FOR_RGB_LED RET_PATTERN_LENGTH_FIRST_HALF + RGB_LED_BIT_LENGTH + RET_PATTERN_LENGTH_SECOND_HALF
-
-#define COLOR_CHANGE_TIME_MS 1000/60
-
 // extern uint16_t mem_area_rgb_led[LEN_MEM_AREA_FOR_RGB_LED];
+extern uint8_t led_rgb_value;
 
 
 void update_led_mem(void);
@@ -90,6 +77,8 @@ void define_color_2();
 void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array);
 void rotate_rgb_one_led();
 void ping_pong_one_led();
+
+void blink_ready(int num_to_blink);
 
 /* USER CODE END Private defines */
 

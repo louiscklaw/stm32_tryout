@@ -60,70 +60,10 @@
 // define the number of the led
 
 
-// length of reset(RET) pattern
-
-uint16_t test_zero_test_one[]={BIT0, BIT1, BIT0, BIT1};
-uint16_t test_four_zero[]={BIT0, BIT0, BIT0, BIT0};
-uint16_t test_four_one[]={BIT1, BIT1, BIT1, BIT1};
-
-uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
-uint16_t RET_TESTBIT_FIRST_HALF[RET_PATTERN_LENGTH_FIRST_HALF]={0};
-uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
-
-
 // uint16_t ONE_BIT_RET_PATTERN[one_testbit_len]={0};
 
-uint16_t* led_test_array;
-uint16_t* starting_address;
-
 // RUN CONFIGURATION
-int test_pattern_total_length;
 
-uint16_t black_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
-
-uint16_t white_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    };
-
-uint16_t r_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
-uint16_t r_led_testbit_length=24;
-
-uint16_t g_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
-uint16_t g_led_testbit_length=24;
-
-uint16_t b_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    };
-
-uint8_t color_control=0;
-
-// hold the rgb_value of the led array
-// 0=>R, 1=>G, 2=>B
-uint8_t rgb_value_array[3][NUM_OF_WS2812]={0};
-
-// hold the PWM value of led array
-uint16_t rgb_pwm_value_array[3][NUM_OF_WS2812]={0};
-
-int len_led_rgb_values = NUM_OF_WS2812*3;
-uint8_t led_rgb_values[NUM_OF_WS2812*3]={0};
-
-extern uint8_t led_rgb_value;
 
 /* USER CODE END PV */
 
@@ -133,7 +73,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-void blink_ready(int num_to_blink);
+
 
 /* USER CODE END PFP */
 
