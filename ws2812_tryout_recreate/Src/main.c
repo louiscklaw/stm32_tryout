@@ -397,13 +397,19 @@ void rotate_rgb_one_led(){
 
 void ping_pong_one_led()
 {
+    int j = 0;
+    int random_r = rand() % 32;
+    int random_g = rand() % 32;
+    int random_b = rand() % 32;
     for (int i=0;i<NUM_OF_WS2812*2-2;i++){
       if (i<=7){
-        turn_on_one_led_only(i,128,0,0,led_rgb_values);
-
+        j = i;
       }else{
-        turn_on_one_led_only(7-(i-7),128,0,0,led_rgb_values);
+        j = 7-(i-7);
       }
+      turn_on_one_led_only(j,random_r,random_g,random_b,led_rgb_values);
+
+
       HAL_Delay(100);
     }
 
