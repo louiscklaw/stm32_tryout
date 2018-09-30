@@ -62,9 +62,6 @@
 
 /* USER CODE BEGIN Private defines */
 
-#define BIT0 30
-#define BIT1 60
-
 #define RET_PATTERN_LENGTH 48
 #define RET_PATTERN_LENGTH_FIRST_HALF 24
 #define RET_PATTERN_LENGTH_SECOND_HALF 24
@@ -78,6 +75,8 @@
 #define LEN_MEM_AREA_FOR_RGB_LED RET_PATTERN_LENGTH_FIRST_HALF + RGB_LED_BIT_LENGTH + RET_PATTERN_LENGTH_SECOND_HALF
 
 #define COLOR_CHANGE_TIME_MS 1000/60
+
+// extern uint16_t mem_area_rgb_led[LEN_MEM_AREA_FOR_RGB_LED];
 
 
 void update_led_mem(void);

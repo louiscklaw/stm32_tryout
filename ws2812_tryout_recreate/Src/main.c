@@ -59,7 +59,6 @@
 
 // define the number of the led
 
-uint16_t mem_area_rgb_led[LEN_MEM_AREA_FOR_RGB_LED] = {0};
 
 // length of reset(RET) pattern
 
