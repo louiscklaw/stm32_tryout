@@ -348,9 +348,7 @@ void ping_pong_one_led()
         j = 7-(i-7);
       }
       turn_on_one_led_only(j,random_r,random_g,random_b,led_rgb_values);
-
-
-      HAL_Delay(100);
+      HAL_Delay(COLOR_CHANGE_TIME_MS);
     }
 
 }
