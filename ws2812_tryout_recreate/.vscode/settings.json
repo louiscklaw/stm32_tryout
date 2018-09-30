@@ -3,6 +3,8 @@
         "dockerfile.*": "dockerfile",
         "docker-compose.*": "dockerfile",
         ".gitattributes": "gitignore",
-        "stdio.h": "c"
+        "*.h": "c",
+        "stdio.h": "c",
+        "cmath": "c"
     }
 }
