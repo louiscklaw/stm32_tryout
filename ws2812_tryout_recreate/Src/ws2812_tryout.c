@@ -159,7 +159,7 @@ void rotate_rainbow_one_led(int per_delay, int change_color_speed)
 
 }
 
-void rainbow_led(int per_delay)
+void rainbow_led(int per_delay, int offset)
 {
     uint8_t r, g, b;
     uint8_t * pr=&r;
@@ -170,20 +170,33 @@ void rainbow_led(int per_delay)
     uint8_t rainbow_end = 255;
 
     int color_delta=trunc(255/num_of_ws2812);
-    int d_h=0;
+    int d_h=offset;
     for (int i=0;i<num_of_ws2812;i++)
     {
       d_h = d_h + color_delta;
       d_h=d_h % 255;
 
-      hsv_to_rgb(d_h, 255, 4, pr,pg,pb);
+      hsv_to_rgb(d_h, 255, 25, pr,pg,pb);
       assign_color(i,r,g,b,led_rgb_values);
     }
 
     HAL_Delay(per_delay);
 }
 
+void rotate_rainbow_led(int per_delay)
+{
+  int color_min=0;
+  int color_max=255;
+  int color_step=1;
 
+  for(int i =color_min;i<color_max;i+=color_step)
+  {
+    rainbow_led(0, i);
+    HAL_Delay(per_delay);
+  }
+
+
+}
 
 
 void ping_pong_one_led(int per_delay)
