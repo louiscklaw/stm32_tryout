@@ -122,25 +122,6 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  // led_test_array = malloc(length_test_array * sizeof(uint16_t));
-
-
-  // led_rgb_values[0]=1;
-  // led_rgb_values[1]=0;
-  // led_rgb_values[2]=0;
-
-  // led_rgb_values[3+0]=0;
-  // led_rgb_values[3+1]=1;
-  // led_rgb_values[3+2]=0;
-
-
-
-  // memcpy(starting_address , RET_TESTBIT_FIRST_HALF, RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
-  // starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
-
-
-  // update_led_mem();
-
   HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)mem_area_rgb_led, LED_MEM_AREA_LENGTH);
   /* USER CODE END 2 */
 
@@ -152,7 +133,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    rotate_rgb_one_led();
+    rotate_rgb_one_led(500);
+    // ping_pong_one_led(100);
   }
   /* USER CODE END 3 */
 

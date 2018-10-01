@@ -97,44 +97,50 @@ void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array)
 }
 
 
-void rotate_rgb_one_led()
+void rotate_rgb_one_led(int per_delay)
 {
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,128,0,0,led_rgb_values);
-      HAL_Delay(100);
+      turn_on_one_led_only(i,get_random_color(128),0,0,led_rgb_values);
+      HAL_Delay(per_delay);
     }
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,0,0,128,led_rgb_values);
-      HAL_Delay(100);
+      turn_on_one_led_only(i,0,0,get_random_color(128),led_rgb_values);
+      HAL_Delay(per_delay);
     }
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,0,128,0,led_rgb_values);
-      HAL_Delay(100);
+      turn_on_one_led_only(i,0,get_random_color(128),0,led_rgb_values);
+      HAL_Delay(per_delay);
     }
 
 }
-void ping_pong_one_led()
+
+
+void ping_pong_one_led(int per_delay)
 {
     int j = 0;
-    int random_r = rand() % 32;
-    int random_g = rand() % 32;
-    int random_b = rand() % 32;
+    int random_r = get_random_color(32);
+    int random_g = get_random_color(32);
+    int random_b = get_random_color(32);
     for (int i=0;i<NUM_OF_WS2812*2-2;i++){
       if (i<=7){
         j = i;
       }else{
         j = 7-(i-7);
       }
-
       turn_on_one_led_only(j,random_r,random_g,random_b,led_rgb_values);
 
-      HAL_Delay(100);
+      HAL_Delay(per_delay);
     }
 
 
+}
+
+int get_random_color(int max_brightness)
+{
+  return rand() % max_brightness;
 }
 
 void convert_LED_to_binary(uint8_t RGB_value, uint16_t* binary_value)
