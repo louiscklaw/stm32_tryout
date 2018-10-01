@@ -46,7 +46,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
 #include <string.h>
-
+#include "ws2812_tryout.h"
 
 
 /* USER CODE END Includes */
@@ -55,75 +55,23 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+uint16_t mem_area_rgb_led[LED_MEM_AREA_LENGTH] = {0};
+uint16_t* starting_address=mem_area_rgb_led;
 
 // define the number of the led
 
-uint16_t mem_area_rgb_led[LEN_MEM_AREA_FOR_RGB_LED] = {0};
 
 // length of reset(RET) pattern
-
-uint16_t test_zero_test_one[]={BIT0, BIT1, BIT0, BIT1};
-uint16_t test_four_zero[]={BIT0, BIT0, BIT0, BIT0};
-uint16_t test_four_one[]={BIT1, BIT1, BIT1, BIT1};
-
-uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
-uint16_t RET_TESTBIT_FIRST_HALF[RET_PATTERN_LENGTH_FIRST_HALF]={0};
-uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
-
 
 // uint16_t ONE_BIT_RET_PATTERN[one_testbit_len]={0};
 
 uint16_t* led_test_array;
-uint16_t* starting_address;
 
-// RUN CONFIGURATION
-int test_pattern_total_length;
+// extern uint16_t *mem_area_rgb_led;
 
-uint16_t black_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
 
-uint16_t white_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    };
 
-uint16_t r_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
-uint16_t r_led_testbit_length=24;
 
-uint16_t g_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    };
-uint16_t g_led_testbit_length=24;
-
-uint16_t b_led_testbit[]={
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
-    BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
-    };
-
-uint8_t color_control=0;
-
-// hold the rgb_value of the led array
-// 0=>R, 1=>G, 2=>B
-uint8_t rgb_value_array[3][NUM_OF_WS2812]={0};
-
-// hold the PWM value of led array
-uint16_t rgb_pwm_value_array[3][NUM_OF_WS2812]={0};
-
-int len_led_rgb_values = NUM_OF_WS2812*3;
-uint8_t led_rgb_values[NUM_OF_WS2812*3]={0};
-uint8_t led_rgb_value;
 
 /* USER CODE END PV */
 
@@ -177,13 +125,13 @@ int main(void)
   // led_test_array = malloc(length_test_array * sizeof(uint16_t));
 
 
-  led_rgb_values[0]=1;
-  led_rgb_values[1]=0;
-  led_rgb_values[2]=0;
+  // led_rgb_values[0]=1;
+  // led_rgb_values[1]=0;
+  // led_rgb_values[2]=0;
 
-  led_rgb_values[3+0]=0;
-  led_rgb_values[3+1]=1;
-  led_rgb_values[3+2]=0;
+  // led_rgb_values[3+0]=0;
+  // led_rgb_values[3+1]=1;
+  // led_rgb_values[3+2]=0;
 
 
 
@@ -191,11 +139,9 @@ int main(void)
   // starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
 
 
-  update_led_mem();
+  // update_led_mem();
 
-
-
-  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)mem_area_rgb_led, LEN_MEM_AREA_FOR_RGB_LED);
+  HAL_TIM_PWM_Start_DMA(&htim3, TIM_CHANNEL_1, (uint32_t *)mem_area_rgb_led, LED_MEM_AREA_LENGTH);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -263,157 +209,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void update_led_mem(void){
-  starting_address=mem_area_rgb_led;
 
-
-  uint16_t test_led_pwm_value[24]={0};
-
-
-  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
-
-  for (int i =0;i<len_led_rgb_values;i++){
-
-    led_rgb_value = led_rgb_values[i];
-    convert_LED_to_binary(led_rgb_value, test_led_pwm_value);
-
-    int length_per_color_value = 8;
-
-
-    memcpy(starting_address, test_led_pwm_value, length_per_color_value * sizeof(uint16_t));
-    starting_address +=length_per_color_value;
-  }
-
-  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
-
-}
-
-void update_led_g_mem(void){
-  starting_address=mem_area_rgb_led;
-  memcpy(starting_address ,RET_TESTBIT_FIRST_HALF , RET_PATTERN_LENGTH_FIRST_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_FIRST_HALF;
-
-  memcpy(starting_address, g_led_testbit, g_led_testbit_length * sizeof(uint16_t));
-  starting_address +=g_led_testbit_length;
-
-  memcpy(starting_address, g_led_testbit, g_led_testbit_length * sizeof(uint16_t));
-  starting_address +=g_led_testbit_length;
-
-  memcpy(starting_address ,RET_TESTBIT_SECOND_HALF , RET_PATTERN_LENGTH_SECOND_HALF * sizeof(uint16_t));
-  starting_address +=RET_PATTERN_LENGTH_SECOND_HALF;
-
-}
-
-void convert_channel_to_binary(uint8_t color_value, uint16_t* output_array)
-{
-    int j =0;
-    for(int i = 128U; i >0; i = i >> 1){
-        if (color_value >= i){
-            output_array[j]=BIT1;
-            color_value -= i;
-        }else{
-            output_array[j]=BIT0;
-        }
-        j+=1;
-    }
-
-}
-
-void convert_LED_to_binary(uint8_t RGB_value, uint16_t* binary_value)
-{
-  // g define from 0 -> 8
-  convert_channel_to_binary(RGB_value, binary_value);
-
-}
-
-void define_color_1()
-{
-
-  led_rgb_values[0]=1;
-  led_rgb_values[1]=0;
-  led_rgb_values[2]=0;
-
-  led_rgb_values[3+0]=0;
-  led_rgb_values[3+1]=1;
-  led_rgb_values[3+2]=0;
-
-}
-
-void define_color_2()
-{
-
-  led_rgb_values[0+0]=0;
-  led_rgb_values[0+1]=1;
-  led_rgb_values[0+2]=0;
-
-  led_rgb_values[3+0]=0;
-  led_rgb_values[3+1]=0;
-  led_rgb_values[3+2]=1;
-
-}
-
-void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array)
-{
-  for(int led_pos =0;led_pos<NUM_OF_WS2812;led_pos++)
-  {
-    int bit_g_pos = led_pos*3;
-    int bit_r_pos = bit_g_pos + 1;
-    int bit_b_pos = bit_g_pos + 2;
-
-    if (led_pos == pos)
-    {
-      output_array[bit_g_pos]=g;
-      output_array[bit_r_pos]=r;
-      output_array[bit_b_pos]=b;
-    }else{
-      // blackout the others
-      output_array[bit_g_pos]=0;
-      output_array[bit_r_pos]=0;
-      output_array[bit_b_pos]=0;
-    }
-  }
-}
-
-void rotate_rgb_one_led(){
-
-    for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,128,0,0,led_rgb_values);
-      HAL_Delay(100);
-    }
-
-    for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,0,0,128,led_rgb_values);
-      HAL_Delay(100);
-    }
-
-    for (int i=0;i<NUM_OF_WS2812;i++){
-      turn_on_one_led_only(i,0,128,0,led_rgb_values);
-      HAL_Delay(100);
-    }
-
-}
-
-void ping_pong_one_led()
-{
-    int j = 0;
-    int random_r = rand() % 32;
-    int random_g = rand() % 32;
-    int random_b = rand() % 32;
-    for (int i=0;i<NUM_OF_WS2812*2-2;i++){
-      if (i<=7){
-        j = i;
-      }else{
-        j = 7-(i-7);
-      }
-      turn_on_one_led_only(j,random_r,random_g,random_b,led_rgb_values);
-
-
-      HAL_Delay(100);
-    }
-
-}
 
 /* USER CODE END 4 */
 

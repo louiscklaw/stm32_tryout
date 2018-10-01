@@ -37,6 +37,7 @@
 
 /* USER CODE BEGIN 0 */
 #include <string.h>
+#include "ws2812_tryout.h"
 
 extern uint16_t r_led_testbit[];
 extern uint16_t* led_test_array;
@@ -45,26 +46,8 @@ extern uint8_t color_control;
 
 int bit_counter=0;
 
-void tick_gpio_pin(DMA_HandleTypeDef *hdma);
-
-void tick_gpio_pin(DMA_HandleTypeDef *hdma){
-  bit_counter+=1;
-
-  if (bit_counter > 1){
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-  }else{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
-
-  }
-
-  if (bit_counter > 1){
-    bit_counter=0;
-  }
-  update_led_mem();
 
 
-
-}
 
 /* USER CODE END 0 */
 
@@ -228,6 +211,7 @@ void SysTick_Handler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
+
   hdma_tim3_ch1_trig.XferCpltCallback=&tick_gpio_pin;
   /* USER CODE END DMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
