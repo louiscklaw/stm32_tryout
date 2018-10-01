@@ -78,24 +78,7 @@ uint8_t num_of_ws2812 = NUM_OF_WS2812;
 
 void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array)
 {
-  // for(int led_pos =0;led_pos<NUM_OF_WS2812;led_pos++)
-  // {
-  //   int bit_g_pos = led_pos*3;
-  //   int bit_r_pos = bit_g_pos + 1;
-  //   int bit_b_pos = bit_g_pos + 2;
 
-  //   if (led_pos == pos)
-  //   {
-  //     output_array[bit_g_pos]=g;
-  //     output_array[bit_r_pos]=r;
-  //     output_array[bit_b_pos]=b;
-  //   }else{
-  //     // blackout the others
-  //     output_array[bit_g_pos]=0;
-  //     output_array[bit_r_pos]=0;
-  //     output_array[bit_b_pos]=0;
-  //   }
-  // }
   for(int led_pos =0;led_pos<NUM_OF_WS2812;led_pos++)
   {
     if (led_pos==pos)
@@ -194,8 +177,6 @@ void rotate_rainbow_led(int per_delay)
     rainbow_led(0, i);
     HAL_Delay(per_delay);
   }
-
-
 }
 
 
