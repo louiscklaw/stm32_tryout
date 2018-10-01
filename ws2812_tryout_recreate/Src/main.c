@@ -133,8 +133,10 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    rotate_rgb_one_led(500);
-    // ping_pong_one_led(100);
+    // rotate_rgb_one_led(100);
+    // ping_pong_one_led(50);
+    // rotate_rainbow_one_led(100,1);
+    rainbow_led(100);
   }
   /* USER CODE END 3 */
 

@@ -44,11 +44,6 @@ extern uint16_t* led_test_array;
 extern int one_testbit_len;
 extern uint8_t color_control;
 
-int bit_counter=0;
-
-
-
-
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -213,6 +208,7 @@ void DMA1_Channel6_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
 
   hdma_tim3_ch1_trig.XferCpltCallback=&tick_gpio_pin;
+  // hdma_tim3_ch1_trig.XferHalfCpltCallback=&tick_gpio_pin;
   /* USER CODE END DMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_tim3_ch1_trig);
   /* USER CODE BEGIN DMA1_Channel6_IRQn 1 */

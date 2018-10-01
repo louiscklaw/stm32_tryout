@@ -55,7 +55,8 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 Src/system_stm32f1xx.c  \
-Src/ws2812_tryout.c
+Src/ws2812_tryout.c \
+Src/hsv2rgb.c
 
 # ASM sources
 ASM_SOURCES =  \

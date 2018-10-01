@@ -5,7 +5,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "ws2812_tryout.h"
-
+#include "hsv2rgb.h"
 
 
 uint16_t black_testbit[]={
@@ -40,6 +40,10 @@ uint16_t b_led_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT1,
     };
 
+uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
+uint16_t RET_TESTBIT_FIRST_HALF[RET_PATTERN_LENGTH_FIRST_HALF]={0};
+uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
+
 
 // RUN CONFIGURATION
 int test_pattern_total_length;
@@ -59,10 +63,6 @@ uint16_t test_zero_test_one[]={BIT0, BIT1, BIT0, BIT1};
 uint16_t test_four_zero[]={BIT0, BIT0, BIT0, BIT0};
 uint16_t test_four_one[]={BIT1, BIT1, BIT1, BIT1};
 
-uint16_t RET_PATTERN[RET_PATTERN_LENGTH]={0};
-uint16_t RET_TESTBIT_FIRST_HALF[RET_PATTERN_LENGTH_FIRST_HALF]={0};
-uint16_t RET_TESTBIT_SECOND_HALF[RET_PATTERN_LENGTH_SECOND_HALF]={0};
-
 
 int len_led_rgb_values = NUM_OF_WS2812*3;
 
@@ -74,28 +74,52 @@ extern uint16_t* starting_address;
 
 uint8_t led_rgb_value;
 
+uint8_t num_of_ws2812 = NUM_OF_WS2812;
+
 void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array)
 {
+  // for(int led_pos =0;led_pos<NUM_OF_WS2812;led_pos++)
+  // {
+  //   int bit_g_pos = led_pos*3;
+  //   int bit_r_pos = bit_g_pos + 1;
+  //   int bit_b_pos = bit_g_pos + 2;
+
+  //   if (led_pos == pos)
+  //   {
+  //     output_array[bit_g_pos]=g;
+  //     output_array[bit_r_pos]=r;
+  //     output_array[bit_b_pos]=b;
+  //   }else{
+  //     // blackout the others
+  //     output_array[bit_g_pos]=0;
+  //     output_array[bit_r_pos]=0;
+  //     output_array[bit_b_pos]=0;
+  //   }
+  // }
   for(int led_pos =0;led_pos<NUM_OF_WS2812;led_pos++)
   {
-    int bit_g_pos = led_pos*3;
-    int bit_r_pos = bit_g_pos + 1;
-    int bit_b_pos = bit_g_pos + 2;
-
-    if (led_pos == pos)
+    if (led_pos==pos)
     {
-      output_array[bit_g_pos]=g;
-      output_array[bit_r_pos]=r;
-      output_array[bit_b_pos]=b;
+      assign_color(led_pos,r,g,b,output_array);
     }else{
-      // blackout the others
-      output_array[bit_g_pos]=0;
-      output_array[bit_r_pos]=0;
-      output_array[bit_b_pos]=0;
+      assign_color(led_pos,0,0,0,output_array);
     }
   }
 }
 
+void assign_color(int pos, int r, int g, int b, uint8_t* output_array)
+{
+
+    int bit_g_pos = pos*3;
+    int bit_r_pos = bit_g_pos + 1;
+    int bit_b_pos = bit_g_pos + 2;
+
+    output_array[bit_g_pos]=g;
+    output_array[bit_r_pos]=r;
+    output_array[bit_b_pos]=b;
+
+
+}
 
 void rotate_rgb_one_led(int per_delay)
 {
@@ -116,6 +140,50 @@ void rotate_rgb_one_led(int per_delay)
     }
 
 }
+
+
+void rotate_rainbow_one_led(int per_delay, int change_color_speed)
+{
+      uint8_t r, g, b;
+      uint8_t * pr=&r;
+      uint8_t * pg=&g;
+      uint8_t * pb=&b;
+
+    for (int d_h=0; d_h < 255; d_h+=change_color_speed){
+      hsv_to_rgb(d_h, 255, 4, pr,pg,pb);
+      for (int i=0;i<NUM_OF_WS2812;i++){
+        turn_on_one_led_only(i,r,g,b,led_rgb_values);
+        HAL_Delay(per_delay);
+      }
+    }
+
+}
+
+void rainbow_led(int per_delay)
+{
+    uint8_t r, g, b;
+    uint8_t * pr=&r;
+    uint8_t * pg=&g;
+    uint8_t * pb=&b;
+
+    uint8_t rainbow_start = 0;
+    uint8_t rainbow_end = 255;
+
+    int color_delta=trunc(255/num_of_ws2812);
+    int d_h=0;
+    for (int i=0;i<num_of_ws2812;i++)
+    {
+      d_h = d_h + color_delta;
+      d_h=d_h % 255;
+
+      hsv_to_rgb(d_h, 255, 4, pr,pg,pb);
+      assign_color(i,r,g,b,led_rgb_values);
+    }
+
+    HAL_Delay(per_delay);
+}
+
+
 
 
 void ping_pong_one_led(int per_delay)
@@ -218,19 +286,8 @@ void update_led_mem(void)
 }
 
 
-extern int bit_counter;
 void tick_gpio_pin(DMA_HandleTypeDef *hdma){
-  bit_counter+=1;
-
-  if (bit_counter > 1){
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-  }else{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
-
-  }
-
-  if (bit_counter > 1){
-    bit_counter=0;
-  }
+  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
   update_led_mem();
+  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
 }

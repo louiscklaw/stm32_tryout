@@ -7,8 +7,8 @@
 #define BIT0 30
 #define BIT1 60
 
-#define RET_PATTERN_LENGTH_FIRST_HALF 50
-#define RET_PATTERN_LENGTH_SECOND_HALF RET_PATTERN_LENGTH_FIRST_HALF
+#define RET_PATTERN_LENGTH_FIRST_HALF 70
+#define RET_PATTERN_LENGTH_SECOND_HALF RET_PATTERN_LENGTH_FIRST_HALF*1/10
 
 #define RET_PATTERN_LENGTH RET_PATTERN_LENGTH_FIRST_HALF+RET_PATTERN_LENGTH_SECOND_HALF
 
@@ -36,5 +36,13 @@ void convert_channel_to_binary(uint8_t color_value, uint16_t* output_array);
 void update_led_mem(void);
 
 void tick_gpio_pin(DMA_HandleTypeDef *hdma);
+
+int get_random_color(int max_brightness);
+
+void rotate_rainbow_one_led(int per_delay, int change_color_speed);
+
+void assign_color(int pos, int r, int g, int b, uint8_t* output_array);
+
+int HELLOWORLD;
 
 #endif
