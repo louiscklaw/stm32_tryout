@@ -152,7 +152,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    ping_pong_one_led();
+    rotate_rgb_one_led();
   }
   /* USER CODE END 3 */
 

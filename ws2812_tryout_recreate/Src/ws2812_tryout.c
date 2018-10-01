@@ -101,20 +101,17 @@ void rotate_rgb_one_led()
 {
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      // TODO: resume me
-      // turn_on_one_led_only(i,128,0,0,led_rgb_values);
+      turn_on_one_led_only(i,128,0,0,led_rgb_values);
       HAL_Delay(100);
     }
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      // TODO: resume me
-      // turn_on_one_led_only(i,0,0,128,led_rgb_values);
+      turn_on_one_led_only(i,0,0,128,led_rgb_values);
       HAL_Delay(100);
     }
 
     for (int i=0;i<NUM_OF_WS2812;i++){
-      // TODO: resume me
-      // turn_on_one_led_only(i,0,128,0,led_rgb_values);
+      turn_on_one_led_only(i,0,128,0,led_rgb_values);
       HAL_Delay(100);
     }
 
@@ -131,7 +128,7 @@ void ping_pong_one_led()
       }else{
         j = 7-(i-7);
       }
-      // TODO: resume me
+
       turn_on_one_led_only(j,random_r,random_g,random_b,led_rgb_values);
 
       HAL_Delay(100);
@@ -166,27 +163,25 @@ void convert_channel_to_binary(uint8_t color_value, uint16_t* output_array)
 
 void define_color_1()
 {
-  // TODO:resume me
-  // led_rgb_values[0]=1;
-  // led_rgb_values[1]=0;
-  // led_rgb_values[2]=0;
+  led_rgb_values[0]=1;
+  led_rgb_values[1]=0;
+  led_rgb_values[2]=0;
 
-  // led_rgb_values[3+0]=0;
-  // led_rgb_values[3+1]=1;
-  // led_rgb_values[3+2]=0;
+  led_rgb_values[3+0]=0;
+  led_rgb_values[3+1]=1;
+  led_rgb_values[3+2]=0;
 
 }
 
 void define_color_2()
 {
-  // TODO:resume me
-  // led_rgb_values[0+0]=0;
-  // led_rgb_values[0+1]=1;
-  // led_rgb_values[0+2]=0;
+  led_rgb_values[0+0]=0;
+  led_rgb_values[0+1]=1;
+  led_rgb_values[0+2]=0;
 
-  // led_rgb_values[3+0]=0;
-  // led_rgb_values[3+1]=0;
-  // led_rgb_values[3+2]=1;
+  led_rgb_values[3+0]=0;
+  led_rgb_values[3+1]=0;
+  led_rgb_values[3+2]=1;
 
 }
 
