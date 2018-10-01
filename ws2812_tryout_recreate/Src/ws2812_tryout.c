@@ -6,7 +6,7 @@
 
 #include "ws2812_tryout.h"
 #include "hsv2rgb.h"
-
+#include <math.h>
 
 uint16_t black_testbit[]={
     BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0, BIT0,
@@ -142,39 +142,42 @@ void rotate_rainbow_one_led(int per_delay, int change_color_speed)
 
 }
 
-void rainbow_led(int per_delay, int offset)
+void rainbow_led(int per_delay, int hsv_h_offset, int hsv_h_min, int hsv_h_max, int hsv_s, int hsv_v)
 {
     uint8_t r, g, b;
     uint8_t * pr=&r;
     uint8_t * pg=&g;
     uint8_t * pb=&b;
 
-    uint8_t rainbow_start = 0;
-    uint8_t rainbow_end = 255;
+    int hsv_h_range = hsv_h_max-hsv_h_min;
+    int color_delta=trunc(hsv_h_range/num_of_ws2812);
+    int d_h=hsv_h_offset+hsv_h_min;
 
-    int color_delta=trunc(255/num_of_ws2812);
-    int d_h=offset;
     for (int i=0;i<num_of_ws2812;i++)
     {
-      d_h = d_h + color_delta;
-      d_h=d_h % 255;
+      if (d_h > hsv_h_max){
+        d_h=(d_h-hsv_h_max)+hsv_h_min;
+      }
 
-      hsv_to_rgb(d_h, 255, 25, pr,pg,pb);
+      hsv_to_rgb(d_h, hsv_s, hsv_v, pr,pg,pb);
       assign_color(i,r,g,b,led_rgb_values);
+      d_h = d_h + color_delta;
+
     }
 
     HAL_Delay(per_delay);
 }
 
-void rotate_rainbow_led(int per_delay)
+void rotate_rainbow_led(int per_delay, int hsv_h_min, int hsv_h_max, int hsv_h_step, int hsv_s, int hsv_v)
 {
-  int color_min=0;
-  int color_max=255;
-  int color_step=1;
 
-  for(int i =color_min;i<color_max;i+=color_step)
+  for(int i =hsv_h_min;i<hsv_h_max;i+=hsv_h_step)
   {
-    rainbow_led(0, i);
+    // rainbow_led(0, i, hsv_h_min, hsv_h_max, 255, 25);
+    // rainbow_led(0, i, 0, 255, 255, 25);
+    // rainbow_led(0, i, 0, 128, 255, 25);
+    // rainbow_led(0, i, 128, 255, 255, 16);
+    rainbow_led(0,i,hsv_h_min, hsv_h_max, hsv_s, hsv_v);
     HAL_Delay(per_delay);
   }
 }

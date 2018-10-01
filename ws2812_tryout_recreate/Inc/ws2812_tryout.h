@@ -40,8 +40,8 @@ void tick_gpio_pin(DMA_HandleTypeDef *hdma);
 int get_random_color(int max_brightness);
 
 void rotate_rainbow_one_led(int per_delay, int change_color_speed);
-void rainbow_led(int per_delay, int offset);
-void rotate_rainbow_led(int per_delay);
+void rainbow_led(int per_delay, int hsv_h_offset, int hsv_h_min, int hsv_h_max, int hsv_s, int hsv_v);
+void rotate_rainbow_led(int per_delay, int hsv_h_min, int hsv_h_max, int hsv_h_step, int hsv_s, int hsv_v);
 
 void assign_color(int pos, int r, int g, int b, uint8_t* output_array);
 

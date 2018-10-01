@@ -137,7 +137,9 @@ int main(void)
     // ping_pong_one_led(50);
     // rotate_rainbow_one_led(100,1);
     // rainbow_led(100,0);
-    rotate_rainbow_led(1);
+    // rotate_rainbow_led(1, 128, 255, 1, 255, 16);
+    // rotate_rainbow_led(1, 0, 90, 1, 255, 16);
+    rotate_rainbow_led(1, 0, 255, 1, 255, 16);
   }
   /* USER CODE END 3 */
 
