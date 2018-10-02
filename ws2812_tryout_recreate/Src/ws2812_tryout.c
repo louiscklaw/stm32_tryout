@@ -90,6 +90,49 @@ void turn_on_one_led_only(int pos, int r, int g, int b, uint8_t* output_array)
   }
 }
 
+int get_next_led(int pos)
+{
+  if ((pos >= 0) & (pos < num_of_ws2812))
+  {
+    return pos+1;
+  }else{
+    return 0;
+  }
+}
+
+int get_prev_led(int pos)
+{
+  if ((pos > 0) & (pos <= num_of_ws2812))
+  {
+    return pos-1;
+  }else{
+    return num_of_ws2812-1;
+  }
+}
+
+void turn_on_one_led_wave(int pos, int r, int g, int b, uint8_t* output_array)
+{
+  int half_r = 4;
+  int half_g = g/100;
+  int half_b = b/100;
+  int prev_led = get_prev_led(pos);
+  int next_led = get_next_led(pos);
+
+  for(int led_pos =0;led_pos<num_of_ws2812;led_pos++)
+  {
+    if (led_pos==pos)
+    {
+      assign_color(led_pos,r,g,b,output_array);
+    }else if ((led_pos == prev_led ) | (led_pos==next_led))
+    {
+      assign_color(led_pos,half_r,half_g,half_b,output_array);
+    }
+    else{
+      assign_color(led_pos,0,0,0,output_array);
+    }
+  }
+}
+
 void assign_color(int pos, int r, int g, int b, uint8_t* output_array)
 {
 
@@ -119,6 +162,15 @@ void rotate_rgb_one_led(int per_delay)
 
     for (int i=0;i<NUM_OF_WS2812;i++){
       turn_on_one_led_only(i,0,get_random_color(128),0,led_rgb_values);
+      HAL_Delay(per_delay);
+    }
+
+}
+
+void rotate_wave(int per_delay)
+{
+    for (int i=0;i<num_of_ws2812;i++){
+      turn_on_one_led_wave(i,32,0,0,led_rgb_values);
       HAL_Delay(per_delay);
     }
 
@@ -199,8 +251,6 @@ void ping_pong_one_led(int per_delay)
 
       HAL_Delay(per_delay);
     }
-
-
 }
 
 int get_random_color(int max_brightness)

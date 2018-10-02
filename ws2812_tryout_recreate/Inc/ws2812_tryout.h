@@ -45,6 +45,11 @@ void rotate_rainbow_led(int per_delay, int hsv_h_min, int hsv_h_max, int hsv_h_s
 
 void assign_color(int pos, int r, int g, int b, uint8_t* output_array);
 
+int get_next_led(int pos);
+int get_prev_led(int pos);
+void rotate_wave(int per_delay);
+
+
 int HELLOWORLD;
 
 #endif
