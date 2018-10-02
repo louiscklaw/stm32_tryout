@@ -1,6 +1,6 @@
-/*****Please include following header files*****/
-// math.h
-/***********************************************/
+// HSV to RGB converter
+// https://en.wikipedia.org/wiki/HSL_and_HSV
+
 #include <stdio.h>
 #include <stdint.h>
 #include <inttypes.h>
@@ -69,30 +69,10 @@ void hsv_to_rgb(uint8_t h, uint8_t s, uint8_t v, uint8_t *oR, uint8_t *oG, uint8
           B=x;
           break;
       }
-      // printf("h_dash=%f\n", h_dash);
-      // printf("degree_60_255=%f\n", degree_60_255);
-      // printf("fmod=%f\n" ,  fabs(fmod(h_dash,2)  - 1));
-      // printf("scale_v=%f\n", scale_v);
-      // printf("scale_s=%f\n", scale_s);
-      // // printf("h=%d\n", h);
-      // // printf("s=%d\n", s);
-      // // printf("v=%d\n", v);
-
-
-      // printf("c=%f\n",c);
-      // printf("x=%f\n",x);
-      // printf("m=%f\n",m);
 
       *oR = (m+R) * 255;
       *oG = (m+G) * 255;
       *oB = (m+B) * 255;
 
     }
-}
-
-
-
-void helloworld_hsv()
-{
-
 }

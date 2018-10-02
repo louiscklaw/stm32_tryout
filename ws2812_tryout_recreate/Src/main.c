@@ -139,8 +139,8 @@ int main(void)
     // rainbow_led(100,0);
     // rotate_rainbow_led(1, 128, 255, 1, 255, 16);
     // rotate_rainbow_led(1, 0, 90, 1, 255, 16);
-    // rotate_rainbow_led(1, 0, 255, 1, 255, 16);
-    rotate_wave(100);
+    rotate_rainbow_led(0, 0, 255, 1, 255, 16);
+    // rotate_wave(100);
   }
   /* USER CODE END 3 */
 
