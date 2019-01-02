@@ -1,0 +1,4 @@
+./build filter=lfs diff=lfs merge=lfs -text
+./Inc filter=lfs diff=lfs merge=lfs -text
+./Middlewares filter=lfs diff=lfs merge=lfs -text
+./Drivers filter=lfs diff=lfs merge=lfs -text

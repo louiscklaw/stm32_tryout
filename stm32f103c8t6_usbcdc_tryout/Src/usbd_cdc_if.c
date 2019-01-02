@@ -60,6 +60,10 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define AT_COMMAND_STACK_MAX 100
+uint8_t MAX_NUM_AT_COMMAND_STACK = AT_COMMAND_STACK_MAX;
+char AT_COMMAND_STACK[AT_COMMAND_STACK_MAX];
+int at_command_stack_top = -1;
 
 /* USER CODE END PV */
 
@@ -291,7 +295,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  CDC_Transmit_FS("helloworld", strlen("helloworld"));
+  print_debug_msg(&"789");
 
 
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
@@ -326,6 +330,33 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
+
+int is_stack_full()
+{
+  if (at_command_stack_top >= MAX_NUM_AT_COMMAND_STACK)
+  {
+    return 1;
+  }else{
+    return 0;
+  }
+}
+
+int push_char_to_stack(char data)
+{
+  if (!is_stack_full())
+  {
+    at_command_stack_top++;
+    strcpy(AT_COMMAND_STACK[at_command_stack_top], data);
+    return 0;
+  }else{
+    return 1;
+  }
+}
+
+void print_debug_msg(char debug_msg[])
+{
+  CDC_Transmit_FS(debug_msg, strlen(debug_msg));
+}
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
