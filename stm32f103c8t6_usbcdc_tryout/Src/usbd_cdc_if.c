@@ -51,6 +51,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
+#include <stdlib.h>
 
 /* USER CODE END INCLUDE */
 
@@ -164,6 +165,9 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
 static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_DECLARATION */
+void push_char_to_stack(char *data);
+void print_stack(void);
+void print_debug_msg(char debug_msg[]);
 
 /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
 
@@ -295,7 +299,28 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  print_debug_msg(&"789");
+  for (int i=0; i< *Len; i++)
+  {
+    // char test[] = Buf[i];
+    CDC_Transmit_FS(Buf[i], 1);
+  }
+
+  // // print_debug_msg(&"789");
+  //   for (int i=0; i<num_of_char; i++)
+  //   {
+  //     char s_temp[100];
+  //     sprintf(s_temp, "%s received", Buf[i]);
+  //     print_debug_msg(s_temp);
+
+  //     if (Buf[i]=='3')
+  //     {
+  //       print_stack();
+  //     }else{
+  //       push_char_to_stack(Buf[i]);
+  //     }
+
+
+  //   }
 
 
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
@@ -341,21 +366,37 @@ int is_stack_full()
   }
 }
 
-int push_char_to_stack(char data)
+void push_char_to_stack(char *data)
 {
   if (!is_stack_full())
   {
     at_command_stack_top++;
     strcpy(AT_COMMAND_STACK[at_command_stack_top], data);
-    return 0;
+    // print_debug_msg(data);
+    print_debug_msg(&"pushed");
+
+
   }else{
-    return 1;
+
   }
 }
+
+void print_stack()
+{
+  print_debug_msg(&"inside print stack");
+  for (int i=0;i< at_command_stack_top; i+=1)
+  {
+    print_debug_msg(AT_COMMAND_STACK[i]);
+    print_debug_msg(&"\r\n");
+  }
+
+}
+
 
 void print_debug_msg(char debug_msg[])
 {
   CDC_Transmit_FS(debug_msg, strlen(debug_msg));
+
 }
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
