@@ -77,16 +77,33 @@
 
 /* USER CODE BEGIN PV */
 
+char temp_rece_data[100];
+uint8_t data_process = 0;
+
+extern uint8_t rece_buf_count;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
+uint8_t try_send_until_done(uint8_t s_temp[]);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
+uint8_t try_send_until_done(uint8_t s_temp[])
+{
+  uint8_t ret_code=-1;
+  ret_code=CDC_Transmit_FS(s_temp, strlen(s_temp));
+
+  return ret_code;
+}
+
 
 /* USER CODE END 0 */
 
@@ -130,13 +147,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-    HAL_Delay(500);
 
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    HAL_Delay(500);
+
+    if (data_process)
+    {
+
+      CDC_Transmit_FS((uint8_t *)temp_rece_data, strlen(temp_rece_data));
+
+      data_process=0;
+      rece_buf_count=0;
+    }else{
+      try_send_until_done(&"turning on...\r\n");
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+      HAL_Delay(1000);
+
+
+      try_send_until_done(&"turning off...\r\n");
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+      HAL_Delay(1000);
+    }
 
   }
+
   /* USER CODE END 3 */
 }
 

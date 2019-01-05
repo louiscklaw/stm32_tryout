@@ -65,6 +65,14 @@
 uint8_t MAX_NUM_AT_COMMAND_STACK = AT_COMMAND_STACK_MAX;
 char AT_COMMAND_STACK[AT_COMMAND_STACK_MAX];
 int at_command_stack_top = -1;
+void send_some_string(char test_string[]);
+void send_and_wait(uint8_t * test_string);
+void CDC_print_helloworld(void);
+
+uint8_t rece_buf_count = 0;
+
+extern char temp_rece_data[100];
+extern uint8_t data_process;
 
 /* USER CODE END PV */
 
@@ -168,6 +176,10 @@ static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
 void push_char_to_stack(char *data);
 void print_stack(void);
 void print_debug_msg(char debug_msg[]);
+
+int is_cr(char c_input[]);
+void print_current_stack(void);
+int is_full_command_stack(void);
 
 /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
 
@@ -296,32 +308,17 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
   */
-static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
+static uint8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  for (int i=0; i< *Len; i++)
+  uint8_t num_of_char = *Len;
+
+  for (int i=0; i< num_of_char; i++)
   {
-    // char test[] = Buf[i];
-    CDC_Transmit_FS(Buf[i], 1);
+    temp_rece_data[rece_buf_count]= Buf[i];
+    rece_buf_count= rece_buf_count+1;
   }
-
-  // // print_debug_msg(&"789");
-  //   for (int i=0; i<num_of_char; i++)
-  //   {
-  //     char s_temp[100];
-  //     sprintf(s_temp, "%s received", Buf[i]);
-  //     print_debug_msg(s_temp);
-
-  //     if (Buf[i]=='3')
-  //     {
-  //       print_stack();
-  //     }else{
-  //       push_char_to_stack(Buf[i]);
-  //     }
-
-
-  //   }
-
+  data_process=1;
 
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
@@ -355,6 +352,16 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
+void send_some_string(char test_string[])
+{
+  CDC_Transmit_FS((uint8_t *)test_string, strlen(test_string));
+}
+
+void send_and_wait(uint8_t * test_string)
+{
+  CDC_Transmit_FS(test_string, 8);
+}
+
 
 int is_stack_full()
 {
@@ -366,14 +373,14 @@ int is_stack_full()
   }
 }
 
-void push_char_to_stack(char *data)
+void push_char_to_stack(char data[])
 {
   if (!is_stack_full())
   {
     at_command_stack_top++;
-    strcpy(AT_COMMAND_STACK[at_command_stack_top], data);
+    AT_COMMAND_STACK[at_command_stack_top] = data[0];
     // print_debug_msg(data);
-    print_debug_msg(&"pushed");
+    print_debug_msg("pushed");
 
 
   }else{
@@ -383,20 +390,75 @@ void push_char_to_stack(char *data)
 
 void print_stack()
 {
-  print_debug_msg(&"inside print stack");
+  char c_temp[1];
+
+  print_debug_msg("inside print stack");
   for (int i=0;i< at_command_stack_top; i+=1)
   {
-    print_debug_msg(AT_COMMAND_STACK[i]);
-    print_debug_msg(&"\r\n");
+    c_temp[0] = AT_COMMAND_STACK[i];
+    print_debug_msg(c_temp);
+    print_debug_msg("\r\n");
   }
 
 }
 
-
 void print_debug_msg(char debug_msg[])
 {
-  CDC_Transmit_FS(debug_msg, strlen(debug_msg));
 
+  CDC_Transmit_FS((uint8_t *)debug_msg, strlen(debug_msg));
+
+}
+
+int is_cr(char c_input[])
+{
+  char char_return[1];
+  char_return[0] = 'a';
+
+  if (c_input[0] ==char_return[0])
+  {
+    return 1;
+  }else{
+    return 0;
+  }
+
+}
+
+void push_to_command_stack(char char_to_push[])
+{
+  if(is_full_command_stack())
+  {
+
+  }else{
+    at_command_stack_top++;
+    AT_COMMAND_STACK[at_command_stack_top]= char_to_push[0];
+  }
+}
+
+int is_full_command_stack()
+{
+  if (at_command_stack_top >= AT_COMMAND_STACK_MAX)
+  {
+    return 1;
+  }else{
+    return 0;
+  }
+}
+
+void print_current_stack()
+{
+  print_debug_msg("this is a debug");
+  for(int i=0; i < at_command_stack_top;i++)
+  {
+    char s_temp[1];
+    s_temp[0] = AT_COMMAND_STACK[i];
+    CDC_Transmit_FS((uint8_t *)s_temp,strlen(s_temp));
+  }
+}
+
+void CDC_print_helloworld()
+{
+  char data[] = "helloworld";
+  CDC_Transmit_FS(data,strlen(data));
 }
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
