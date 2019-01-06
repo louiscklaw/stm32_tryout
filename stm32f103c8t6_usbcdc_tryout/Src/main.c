@@ -142,6 +142,8 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
+  data_process=0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -157,10 +159,11 @@ int main(void)
     {
       CDC_Transmit_FS((uint8_t *)temp_rece_data, strlen(temp_rece_data));
 
+      clean_usb_rx_buffer();
       data_process=0;
       rece_buf_count=0;
     }else{
-
+      HAL_Delay(100);
     }
 
   }

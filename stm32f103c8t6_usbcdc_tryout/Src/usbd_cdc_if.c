@@ -74,10 +74,14 @@ void send_some_string(char test_string[]);
 void send_and_wait(uint8_t * test_string);
 void CDC_print_helloworld(void);
 
+void clean_usb_rx_buffer(void);
+
 uint8_t rece_buf_count = 0;
 
 extern char temp_rece_data[];
 extern uint8_t data_process;
+
+char text_clear_usb_rx_cache[]="CLEAR USB RX CACHE";
 
 /* USER CODE END PV */
 
@@ -318,13 +322,6 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   uint8_t num_of_char = *Len;
 
-  // for (int i=0; i< num_of_char; i++)
-  // {
-  //   temp_rece_data[rece_buf_count]= Buf[i];
-  //   rece_buf_count= rece_buf_count+1;
-  // }
-  // data_process=1;
-
   add_to_buffer(Buf);
 
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
@@ -365,6 +362,8 @@ void clean_usb_rx_buffer()
   {
     temp_rece_data[i]=0;
   }
+
+  CDC_Transmit_FS(text_clear_usb_rx_cache, strlen(text_clear_usb_rx_cache));
 }
 void print_debug_msg(char debug_msg[])
 {
@@ -378,11 +377,16 @@ void add_to_buffer(char s_input[])
   int len_of_string = strlen(s_input);
   for(int i=0; i< len_of_string; i++)
   {
-    temp_rece_data[rece_buf_count]= s_input[i];
-    rece_buf_count= rece_buf_count+1;
+    if (s_input[i]=='\r')
+    {
+      data_process=1;
+    }else{
+      temp_rece_data[rece_buf_count]= s_input[i];
+      rece_buf_count= rece_buf_count+1;
+    }
   }
 
-  data_process=1;
+
 }
 
 int is_cr(char c_input[])
