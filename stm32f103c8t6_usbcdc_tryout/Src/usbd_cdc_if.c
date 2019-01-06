@@ -6,41 +6,41 @@
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * Copyright (c) 2019 STMicroelectronics International N.V. 
+  * Copyright (c) 2019 STMicroelectronics International N.V.
   * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without 
+  * Redistribution and use in source and binary forms, with or without
   * modification, are permitted, provided that the following conditions are met:
   *
-  * 1. Redistribution of source code must retain the above copyright notice, 
+  * 1. Redistribution of source code must retain the above copyright notice,
   *    this list of conditions and the following disclaimer.
   * 2. Redistributions in binary form must reproduce the above copyright notice,
   *    this list of conditions and the following disclaimer in the documentation
   *    and/or other materials provided with the distribution.
-  * 3. Neither the name of STMicroelectronics nor the names of other 
-  *    contributors to this software may be used to endorse or promote products 
+  * 3. Neither the name of STMicroelectronics nor the names of other
+  *    contributors to this software may be used to endorse or promote products
   *    derived from this software without specific written permission.
-  * 4. This software, including modifications and/or derivative works of this 
+  * 4. This software, including modifications and/or derivative works of this
   *    software, must execute solely and exclusively on microcontroller or
   *    microprocessor devices manufactured by or for STMicroelectronics.
-  * 5. Redistribution and use of this software other than as permitted under 
-  *    this license is void and will automatically terminate your rights under 
-  *    this license. 
+  * 5. Redistribution and use of this software other than as permitted under
+  *    this license is void and will automatically terminate your rights under
+  *    this license.
   *
-  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
-  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
-  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
-  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT
   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
-  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
   * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
@@ -61,9 +61,14 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define AT_COMMAND_STACK_MAX 100
-uint8_t MAX_NUM_AT_COMMAND_STACK = AT_COMMAND_STACK_MAX;
-char AT_COMMAND_STACK[AT_COMMAND_STACK_MAX];
+
+// #define AT_COMMAND_STACK_MAX 100
+// uint8_t MAX_NUM_AT_COMMAND_STACK = AT_COMMAND_STACK_MAX;
+// char AT_COMMAND_STACK[AT_COMMAND_STACK_MAX];
+
+extern uint8_t MAX_NUM_AT_COMMAND_STACK;
+extern char AT_COMMAND_STACK;
+
 int at_command_stack_top = -1;
 void send_some_string(char test_string[]);
 void send_and_wait(uint8_t * test_string);
@@ -71,7 +76,7 @@ void CDC_print_helloworld(void);
 
 uint8_t rece_buf_count = 0;
 
-extern char temp_rece_data[100];
+extern char temp_rece_data[];
 extern uint8_t data_process;
 
 /* USER CODE END PV */
@@ -313,12 +318,14 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   uint8_t num_of_char = *Len;
 
-  for (int i=0; i< num_of_char; i++)
-  {
-    temp_rece_data[rece_buf_count]= Buf[i];
-    rece_buf_count= rece_buf_count+1;
-  }
-  data_process=1;
+  // for (int i=0; i< num_of_char; i++)
+  // {
+  //   temp_rece_data[rece_buf_count]= Buf[i];
+  //   rece_buf_count= rece_buf_count+1;
+  // }
+  // data_process=1;
+
+  add_to_buffer(Buf);
 
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
@@ -352,61 +359,30 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
-void send_some_string(char test_string[])
+void clean_usb_rx_buffer()
 {
-  CDC_Transmit_FS((uint8_t *)test_string, strlen(test_string));
-}
-
-void send_and_wait(uint8_t * test_string)
-{
-  CDC_Transmit_FS(test_string, 8);
-}
-
-
-int is_stack_full()
-{
-  if (at_command_stack_top >= MAX_NUM_AT_COMMAND_STACK)
+  for (int i=0; i < MAX_NUM_AT_COMMAND_STACK; i++)
   {
-    return 1;
-  }else{
-    return 0;
+    temp_rece_data[i]=0;
   }
 }
-
-void push_char_to_stack(char data[])
-{
-  if (!is_stack_full())
-  {
-    at_command_stack_top++;
-    AT_COMMAND_STACK[at_command_stack_top] = data[0];
-    // print_debug_msg(data);
-    print_debug_msg("pushed");
-
-
-  }else{
-
-  }
-}
-
-void print_stack()
-{
-  char c_temp[1];
-
-  print_debug_msg("inside print stack");
-  for (int i=0;i< at_command_stack_top; i+=1)
-  {
-    c_temp[0] = AT_COMMAND_STACK[i];
-    print_debug_msg(c_temp);
-    print_debug_msg("\r\n");
-  }
-
-}
-
 void print_debug_msg(char debug_msg[])
 {
 
   CDC_Transmit_FS((uint8_t *)debug_msg, strlen(debug_msg));
 
+}
+
+void add_to_buffer(char s_input[])
+{
+  int len_of_string = strlen(s_input);
+  for(int i=0; i< len_of_string; i++)
+  {
+    temp_rece_data[rece_buf_count]= s_input[i];
+    rece_buf_count= rece_buf_count+1;
+  }
+
+  data_process=1;
 }
 
 int is_cr(char c_input[])
@@ -421,44 +397,6 @@ int is_cr(char c_input[])
     return 0;
   }
 
-}
-
-void push_to_command_stack(char char_to_push[])
-{
-  if(is_full_command_stack())
-  {
-
-  }else{
-    at_command_stack_top++;
-    AT_COMMAND_STACK[at_command_stack_top]= char_to_push[0];
-  }
-}
-
-int is_full_command_stack()
-{
-  if (at_command_stack_top >= AT_COMMAND_STACK_MAX)
-  {
-    return 1;
-  }else{
-    return 0;
-  }
-}
-
-void print_current_stack()
-{
-  print_debug_msg("this is a debug");
-  for(int i=0; i < at_command_stack_top;i++)
-  {
-    char s_temp[1];
-    s_temp[0] = AT_COMMAND_STACK[i];
-    CDC_Transmit_FS((uint8_t *)s_temp,strlen(s_temp));
-  }
-}
-
-void CDC_print_helloworld()
-{
-  char data[] = "helloworld";
-  CDC_Transmit_FS(data,strlen(data));
 }
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */

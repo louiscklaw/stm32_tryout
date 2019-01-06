@@ -76,11 +76,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+#define AT_COMMAND_STACK_MAX 100
+uint8_t MAX_NUM_AT_COMMAND_STACK = AT_COMMAND_STACK_MAX;
+char AT_COMMAND_STACK[AT_COMMAND_STACK_MAX];
 
-char temp_rece_data[100];
 uint8_t data_process = 0;
 
 extern uint8_t rece_buf_count;
+char temp_rece_data[AT_COMMAND_STACK_MAX];
+
 
 /* USER CODE END PV */
 
@@ -151,20 +155,12 @@ int main(void)
 
     if (data_process)
     {
-
       CDC_Transmit_FS((uint8_t *)temp_rece_data, strlen(temp_rece_data));
 
       data_process=0;
       rece_buf_count=0;
     }else{
-      try_send_until_done(&"turning on...\r\n");
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-      HAL_Delay(1000);
 
-
-      try_send_until_done(&"turning off...\r\n");
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-      HAL_Delay(1000);
     }
 
   }
