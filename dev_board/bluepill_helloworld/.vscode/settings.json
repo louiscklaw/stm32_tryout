@@ -1,0 +1,12 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "files.associations": {
+    "main.h": "c",
+    "stm32f1xx_hal.h": "c",
+    "stm32f1xx_hal_conf.h": "c",
+    "stm32f1xx_hal_rcc.h": "c",
+    "stm32f1xx_hal_def.h": "c",
+    "stm32_hal_legacy.h": "c"
+  },
+  "cSpell.words": ["AHBCLK", "GPIOA", "GPIOC", "GPIOD", "HCLK", "PCLK"]
+}
